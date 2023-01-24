@@ -11,6 +11,7 @@ class Voucher extends Model
 
     protected $fillable = [
         'date',
+        'employee_id',
         'number',
         'status',
         'approved_amount',
