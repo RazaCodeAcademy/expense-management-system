@@ -714,6 +714,7 @@ class VoucherController extends Controller
     public function create()
     {
         // $jobs = Job::all();
+        // dd(auth()->user()->employee);
 
         $voucher = Voucher::orderBy('id', 'desc')->first();
         $voucher = Voucher::create([
@@ -1006,6 +1007,6 @@ class VoucherController extends Controller
 
         $voucher->delete();
 
-        return redirect(route('vouchers.index'));
+        return back();
     }
 }

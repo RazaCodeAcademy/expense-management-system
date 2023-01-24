@@ -22,14 +22,15 @@ use App\Http\Controllers\LogbookController;
 |
 */
 
-// Route('/clear', function(){
-//     Artisan::call('config:cache');
-//     Artisan::call('config:clear');
-//     Artisan::call('cache:clear');
-//     Artisan::call('route:clear');
-//     Artisan::call('view:clear');
-//     Artisan::call('storage:link');
-// });
+Route::get('/clear', function(){
+    Artisan::call('config:cache');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('storage:link');
+    return "All cache has been cleared!";
+});
 
 // auth routes
 Route::group(['prefix' => '/auth'], function () {
