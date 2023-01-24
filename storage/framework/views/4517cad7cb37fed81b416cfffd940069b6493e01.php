@@ -1,15 +1,14 @@
-<li <?php if(isset($item['id'])): ?> id="<?php echo e($item['id']); ?>" <?php endif; ?> class="nav-item has-treeview <?php echo e($item['submenu_class']); ?>">
+<li <?php if(isset($item['id'])): ?> id="<?php echo e($item['id']); ?>" <?php endif; ?> class="nav-item">
 
-    
     <a class="nav-link <?php echo e($item['class']); ?> <?php if(isset($item['shift'])): ?> <?php echo e($item['shift']); ?> <?php endif; ?>"
-       href="" <?php echo $item['data-compiled'] ?? ''; ?>>
+       href="<?php echo e($item['href']); ?>" <?php if(isset($item['target'])): ?> target="<?php echo e($item['target']); ?>" <?php endif; ?>
+       <?php echo $item['data-compiled'] ?? ''; ?>>
 
         <i class="<?php echo e($item['icon'] ?? 'far fa-fw fa-circle'); ?> <?php echo e(isset($item['icon_color']) ? 'text-'.$item['icon_color'] : ''); ?>"></i>
 
         <p>
             <?php echo e($item['text']); ?>
 
-            <i class="fas fa-angle-left right"></i>
 
             <?php if(isset($item['label'])): ?>
                 <span class="badge badge-<?php echo e($item['label_color'] ?? 'primary'); ?> right">
@@ -21,9 +20,5 @@
 
     </a>
 
-    
-    <ul class="nav nav-treeview">
-        <?php echo $__env->renderEach('adminlte::partials.sidebar.menu-item', $item['submenu'], 'item'); ?>
-    </ul>
-
-</li><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/sidebar/menu-item-treeview-menu.blade.php ENDPATH**/ ?>
+</li>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/sidebar/menu-item-link.blade.php ENDPATH**/ ?>

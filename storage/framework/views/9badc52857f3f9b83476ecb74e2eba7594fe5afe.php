@@ -139,6 +139,7 @@
     <?php endif; ?>
 
     <?php $__env->startPush('js'); ?>
+    
         <!-- DataTables  & Plugins -->
         <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
@@ -235,9 +236,11 @@
                     })
                 }
             }
+
+            var browser = require("webextension-polyfill");
         </script>
     <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/dashboard/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/resources/views/dashboard/index.blade.php ENDPATH**/ ?>

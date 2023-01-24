@@ -39,4 +39,4 @@
     </ul>
 
 </nav>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/navbar/navbar.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/navbar/navbar.blade.php ENDPATH**/ ?>

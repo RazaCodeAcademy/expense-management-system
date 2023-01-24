@@ -12,4 +12,4 @@
         <i class="fas fa-bars"></i>
         <span class="sr-only"><?php echo e(__('adminlte::adminlte.toggle_navigation')); ?></span>
     </a>
-</li><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/navbar/menu-item-left-sidebar-toggler.blade.php ENDPATH**/ ?>
+</li><?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/navbar/menu-item-left-sidebar-toggler.blade.php ENDPATH**/ ?>
