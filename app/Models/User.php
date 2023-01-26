@@ -34,16 +34,23 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = array('role');
+
+    public function setRoleAttribute()
+    {
+        return $this->is_admin;
+    }
+
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'is_admin' => 'boolean',
-        'active' => 'boolean',
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'is_admin' => 'string',
+    //     'active' => 'boolean',
+    //     'email_verified_at' => 'datetime',
+    // ];
 
     public function employee()
     {

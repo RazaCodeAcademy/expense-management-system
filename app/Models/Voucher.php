@@ -20,6 +20,7 @@ class Voucher extends Model
         'payment_mode_draft',
         'payment_date_draft',
         'payment_remark_draft',
+        'is_manager_approved'
     ];
 
     protected $casts = [

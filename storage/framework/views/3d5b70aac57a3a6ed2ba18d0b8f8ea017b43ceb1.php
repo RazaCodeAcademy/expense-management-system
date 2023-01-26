@@ -1,22 +1,20 @@
-@extends('adminlte::page')
+<?php $__env->startSection('title', 'List Of Approved Vouchers'); ?>
 
-@section('title', 'List Of Approved Vouchers')
-
-@section('content_header')
+<?php $__env->startSection('content_header'); ?>
     <h1>List Of Approved Vouchers</h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @push('css')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startPush('css'); ?>
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/fontawesome-free/css/all.min.css')); ?>">
         <!-- DataTables -->
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')); ?>">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')); ?>">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')); ?>">
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
-    @endpush
+        <link rel="stylesheet" href="<?php echo e(asset('/dist/css/adminlte.min.css')); ?>">
+    <?php $__env->stopPush(); ?>
 
     <div class="card px-3 py-1">
         <!-- /.card-header -->
@@ -25,14 +23,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="min">From :</label>
-                        <input type="date" id="min" onfocus="this.showPicker()" value="{{ date('Y-m-01') }}"
+                        <input type="date" id="min" onfocus="this.showPicker()" value="<?php echo e(date('Y-m-01')); ?>"
                             class="form-control">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="max">To :</label>
-                        <input type="date" id="max" onfocus="this.showPicker()" value="{{ date('Y-m-d') }}"
+                        <input type="date" id="max" onfocus="this.showPicker()" value="<?php echo e(date('Y-m-d')); ?>"
                             class="form-control">
                     </div>
                 </div>
@@ -41,7 +39,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Employee Name</th>
-                        {{-- <th scope="col">Job Numbers</th> --}}
+                        
                         <th scope="col">Voucher Number</th>
                         <th scope="col">Voucher Date</th>
                         <th scope="col">Proposed Amount</th>
@@ -52,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($vouchers as $voucher)
+                    <?php $__currentLoopData = $vouchers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $voucher): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php
                         $expenses = $voucher->expenses;
                         $total_amt = 0.0;
@@ -62,65 +60,63 @@
 
                         ?>
                         <tr>
-                            <td>{{ $voucher->employee()->first()->name }}</td>
-                            {{-- <td>
-                                @foreach ($voucher->jobs as $job)
-                                    {{ $job->number }}@if (!$loop->last)
-                                        ,
-                                    @endif
-                                @endforeach
-                            </td> --}}
-                            <td>{{ $voucher->number }}</td>
+                            <td><?php echo e($voucher->employee()->first()->name); ?></td>
+                            
+                            <td><?php echo e($voucher->number); ?></td>
                             <td>
-                                @if (isset($voucher->date))
-                                    {{ date('Y-m-d', strtotime($voucher->date)) }}
-                                    {{-- {{ $voucher->date->format('d-M-Y') }} --}}
-                                @endif
+                                <?php if(isset($voucher->date)): ?>
+                                    <?php echo e(date('Y-m-d', strtotime($voucher->date))); ?>
+
+                                    
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <span class="badge badge-warning px-2 py-2">
-                                    Rs. {{ $total_amt }}
+                                    Rs. <?php echo e($total_amt); ?>
+
                                 </span>
                             </td>
                             <td>
                                 <span class="badge badge-success px-2 py-2">
-                                    Rs. {{ $voucher->approved_amount }}
+                                    Rs. <?php echo e($voucher->approved_amount); ?>
+
                                 </span>
                             </td>
                             <td>
-                                @if (isset($voucher->approval_date))
-                                    {{ $voucher->approval_date->format('d-M-Y') }}
-                                @endif
+                                <?php if(isset($voucher->approval_date)): ?>
+                                    <?php echo e($voucher->approval_date->format('d-M-Y')); ?>
+
+                                <?php endif; ?>
                             </td>
-                            <td>{{ $voucher->addprovedBy->name }}</td>
+                            <td><?php echo e($voucher->addprovedBy->name); ?></td>
                             <td>
                                 <a class="btn btn-primary"
-                                    href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
+                                    href="<?php echo e(route('employees.voucherDetails', ['id' => $voucher->id])); ?>">View</a>
                             </td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
         <!-- /.card-body -->
     </div>
 
-    @push('js')
+    <?php $__env->startPush('js'); ?>
        <!-- DataTables  & Plugins -->
-        <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/jszip/jszip.min.js') }}"></script>
-        <script src="{{ asset('/plugins/pdfmake/pdfmake.min.js') }}"></script>
-        <script src="{{ asset('/plugins/pdfmake/vfs_fonts.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+        <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-responsive/js/dataTables.responsive.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/dataTables.buttons.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/jszip/jszip.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/pdfmake/pdfmake.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/pdfmake/vfs_fonts.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.html5.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
         <!-- AdminLTE App -->
-        <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+        <script src="<?php echo e(asset('/dist/js/adminlte.min.js')); ?>"></script>
         <script>
             $(function() {
                 var Table = $("#example1").DataTable({
@@ -128,7 +124,7 @@
                         [3, 'desc']
                     ],
                     "oSearch": {
-                        "sSearch": "{{ date('Y-m') }}"
+                        "sSearch": "<?php echo e(date('Y-m')); ?>"
                     },
                     "responsive": true,
                     "lengthChange": false,
@@ -175,14 +171,14 @@
                 });
             });
         </script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-@stop
+<?php $__env->stopSection(); ?>
 
-{{-- @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop --}}
 
-@section('js')
-    <script src="{{ asset('js/tableFilter.js') }}"></script>
-@stop
+
+<?php $__env->startSection('js'); ?>
+    <script src="<?php echo e(asset('js/tableFilter.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/employees/approved.blade.php ENDPATH**/ ?>

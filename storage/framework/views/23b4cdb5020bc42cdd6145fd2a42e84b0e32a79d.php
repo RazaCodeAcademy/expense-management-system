@@ -55,15 +55,26 @@
                     </span>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
-                    <span class="ml-auto">Total Payments</span>
-                    <span class="ml-auto" style="font-size: 60px;" id="payments">
-                        Rs. <?php echo e($payments); ?>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-danger text-white" style="height: 120px;">
+                    <span class="ml-auto">Rejected Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="rejected">
+                        <?php echo e($rejected); ?>
 
                     </span>
                 </div>
             </div>
+            <?php if(auth()->user()->is_admin == 1): ?>
+                <div class="col-sm-4">
+                    <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
+                        <span class="ml-auto">Total Payments</span>
+                        <span class="ml-auto" style="font-size: 60px;" id="payments">
+                            Rs. <?php echo e($payments); ?>
+
+                        </span>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <br><br>
 
@@ -127,14 +138,40 @@
             </div>
             <div class="col-sm-3">
                 <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
-                    <span class="ml-auto">Total Vouchers</span>
-                    <span class="ml-auto" style="font-size: 60px;" id="total_vouchers">
-                        <?php echo e($total_vouchers); ?>
+                    <span class="ml-auto">Draft Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="drafted">
+                        <?php echo e($drafted); ?>
 
                     </span>
                 </div>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-secondary text-white" style="height: 120px;">
+                    <span class="ml-auto">Open Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="approval">
+                        <?php echo e($approval); ?>
+
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-info text-white" style="height: 120px;">
+                    <span class="ml-auto">Approved Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="approved">
+                        <?php echo e($approved); ?>
+
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-danger text-white" style="height: 120px;">
+                    <span class="ml-auto">Rejected Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="rejected">
+                        <?php echo e($rejected); ?>
+
+                    </span>
+                </div>
+            </div>
         </div>
     <?php endif; ?>
 

@@ -204,7 +204,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success" value="+ Add">
+                    <input type="submit" class="btn btn-success" value="+ Save & Continue" name="save_and_continue">
+                    <input type="submit" class="btn btn-info" value="+ Save & Exit" name="save_and_exist">
                 </div>
             </form>
         @endif
@@ -269,6 +270,7 @@
                         <th scope="col">Amount</th>
                         <th scope="col">Description</th>
                         <th scope="col">Bill</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -295,6 +297,9 @@
                                 @else
                                     <span class="badge badge-danger">Bill Not Provided</span>
                                 @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('vouchers.deleteExpense', $expense->id) }}" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     @endforeach

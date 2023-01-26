@@ -55,14 +55,24 @@
                     </span>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
-                    <span class="ml-auto">Total Payments</span>
-                    <span class="ml-auto" style="font-size: 60px;" id="payments">
-                        Rs. {{ $payments }}
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-danger text-white" style="height: 120px;">
+                    <span class="ml-auto">Rejected Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="rejected">
+                        {{ $rejected }}
                     </span>
                 </div>
             </div>
+            @if (auth()->user()->is_admin == 1)
+                <div class="col-sm-4">
+                    <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
+                        <span class="ml-auto">Total Payments</span>
+                        <span class="ml-auto" style="font-size: 60px;" id="payments">
+                            Rs. {{ $payments }}
+                        </span>
+                    </div>
+                </div>
+            @endif
         </div>
         <br><br>
 
@@ -135,13 +145,36 @@
             </div>
             <div class="col-sm-3">
                 <div class="card px-3 py-1 bg-primary text-white" style="height: 120px;">
-                    <span class="ml-auto">Total Vouchers</span>
-                    <span class="ml-auto" style="font-size: 60px;" id="total_vouchers">
-                        {{ $total_vouchers }}
+                    <span class="ml-auto">Draft Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="drafted">
+                        {{ $drafted }}
                     </span>
                 </div>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-secondary text-white" style="height: 120px;">
+                    <span class="ml-auto">Open Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="approval">
+                        {{ $approval }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-info text-white" style="height: 120px;">
+                    <span class="ml-auto">Approved Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="approved">
+                        {{ $approved }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card px-3 py-1 bg-danger text-white" style="height: 120px;">
+                    <span class="ml-auto">Rejected Vouchers</span>
+                    <span class="ml-auto" style="font-size: 60px;" id="rejected">
+                        {{ $rejected }}
+                    </span>
+                </div>
+            </div>
         </div>
     @endif
 

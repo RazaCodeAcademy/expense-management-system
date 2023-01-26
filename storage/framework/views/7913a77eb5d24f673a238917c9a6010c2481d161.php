@@ -1,10 +1,11 @@
-<?php $__env->startSection('title', 'List Of Vouchers Requested For Approval'); ?>
+<?php $__env->startSection('title', 'Payments'); ?>
 
 <?php $__env->startSection('content_header'); ?>
-    <h1>List Of Vouchers Requested For Approval</h1>
+    <h1>Payments</h1>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
+
     <?php $__env->startPush('css'); ?>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="<?php echo e(asset('/plugins/fontawesome-free/css/all.min.css')); ?>">
@@ -15,6 +16,11 @@
         <!-- Theme style -->
         <link rel="stylesheet" href="<?php echo e(asset('/dist/css/adminlte.min.css')); ?>">
     <?php $__env->stopPush(); ?>
+
+    <p class="float-left">List of all payments is visible here.</p>
+
+    <br><br><br>
+
     <div class="card px-3 py-1">
         <!-- /.card-header -->
         <div class="card-body">
@@ -37,43 +43,61 @@
             <table id="example1" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col">Payment Number</th>
                         <th scope="col">Employee Name</th>
-                        
-                        <th scope="col">Voucher Number</th>
-                        <th scope="col">Voucher Date</th>
-                        <th scope="col">Proposed Amount</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Payment Mode</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Remark</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $vouchers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $voucher): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php
-                        $expenses = $voucher->expenses;
-                        $total_amt = 0.0;
-                        foreach ($expenses as $exp) {
-                            $total_amt += $exp->amount;
-                        }
-
-                        ?>
+                    <?php $__currentLoopData = $payments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><?php echo e($voucher->employee()->first()->name); ?></td>
-                            
-                            <td><?php echo e($voucher->number); ?></td>
                             <td>
-                                <?php if(isset($voucher->date)): ?>
-                                    <?php echo e($voucher->date->format('Y-m-d')); ?>
+                                <b style="font-size: 1rem;">
+                                    <?php if(strpos($payment->remark, 'Voucher Accepted') !== false): ?>
+                                        <?php echo e($payment->employee->code); ?>-<?php echo e($payment->id); ?>
 
+                                    <?php else: ?>
+                                        P-<?php echo e($payment->employee->code); ?>-<?php echo e($payment->id); ?>
+
+                                    <?php endif; ?>
+                                </b>
+                            </td>
+                            <td style="font-weight: 700;"><?php echo e($payment->employee->name); ?></td>
+                            <td>
+                                <?php if(strpos($payment->remark, 'Voucher Accepted') !== false): ?>
+                                    <span class="badge badge-success px-2 py-2" style="font-size: 1rem;">
+                                        Rs. -<?php echo e($payment->amount); ?>
+
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge badge-primary px-2 py-2" style="font-size: 1rem;">
+                                        Rs. <?php echo e($payment->amount); ?>
+
+                                    </span>
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <span class="badge badge-primary px-2 py-2">
-                                    Rs. <?php echo e($total_amt); ?>
+                                <span class="badge badge-warning px-2 py-2" style="font-size: 1rem;">
+                                    <?php if(strpos($payment->remark, 'Voucher Accepted') !== false): ?>
+                                        Voucher Accepted
+                                    <?php else: ?>
+                                        <i
+                                            class="fas fa-<?php echo e(App\Accunity\Utils::PAYMENT_MODES_ICONS[$payment->payment_mode]); ?>"></i>
+                                        <?php echo e(App\Accunity\Utils::PAYMENT_MODES[$payment->payment_mode]); ?>
 
+                                    <?php endif; ?>
                                 </span>
                             </td>
-                            <td>
-                                <a class="btn btn-primary"
-                                    href="<?php echo e(route('employees.voucherDetails', ['id' => $voucher->id])); ?>">View</a>
+                            <td style="font-weight: 600;">
+                                <?php echo e($payment->date->format('Y-m-d')); ?>
+
+                            </td>
+                            <td style="font-weight: 600;">
+                                <?php echo e($payment->remark); ?>
+
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -101,7 +125,9 @@
         <script>
             $(function() {
                 $("#example1").DataTable({
-                    "order": [[1, 'desc']],
+                    "order": [
+                        [1, 'desc']
+                    ],
                     "oSearch": {
                     "sSearch": "<?php echo e(date('Y-m')); ?>"
                     },
@@ -125,8 +151,8 @@
                         $('input[type="search"]').val('').keyup();
                         var FilterStart = $('#min').val();
                         var FilterEnd = $('#max').val();
-                        var DataTableStart = data[2].trim();
-                        var DataTableEnd = data[2].trim();
+                        var DataTableStart = data[4].trim();
+                        var DataTableEnd = data[4].trim();
                         if (FilterStart == '' || FilterEnd == '') {
                             return true;
                         }
@@ -151,6 +177,7 @@
             });
         </script>
     <?php $__env->stopPush(); ?>
+
 <?php $__env->stopSection(); ?>
 
 
@@ -159,4 +186,4 @@
     <script src="<?php echo e(asset('js/tableFilter.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/employees/approval.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/payments/index.blade.php ENDPATH**/ ?>

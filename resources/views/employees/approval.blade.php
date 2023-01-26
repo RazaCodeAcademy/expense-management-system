@@ -40,7 +40,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Employee Name</th>
-                        <th scope="col">Job Numbers</th>
+                        {{-- <th scope="col">Job Numbers</th> --}}
                         <th scope="col">Voucher Number</th>
                         <th scope="col">Voucher Date</th>
                         <th scope="col">Proposed Amount</th>
@@ -59,13 +59,13 @@
                         ?>
                         <tr>
                             <td>{{ $voucher->employee()->first()->name }}</td>
-                            <td>
+                            {{-- <td>
                                 @foreach ($voucher->jobs as $job)
                                     {{ $job->number }}@if (!$loop->last)
                                         ,
                                     @endif
                                 @endforeach
-                            </td>
+                            </td> --}}
                             <td>{{ $voucher->number }}</td>
                             <td>
                                 @if (isset($voucher->date))
@@ -131,8 +131,8 @@
                         $('input[type="search"]').val('').keyup();
                         var FilterStart = $('#min').val();
                         var FilterEnd = $('#max').val();
-                        var DataTableStart = data[3].trim();
-                        var DataTableEnd = data[3].trim();
+                        var DataTableStart = data[2].trim();
+                        var DataTableEnd = data[2].trim();
                         if (FilterStart == '' || FilterEnd == '') {
                             return true;
                         }

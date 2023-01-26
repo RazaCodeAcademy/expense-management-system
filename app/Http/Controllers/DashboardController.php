@@ -30,6 +30,8 @@ class DashboardController extends Controller
     {
         $approval = 0;
         $approved = 0;
+        $rejected = 0;
+        $drafted  = 0;
         $payments = 0;
         $total_vouchers = 0;
         $employees = [];
@@ -37,8 +39,14 @@ class DashboardController extends Controller
             $from = request()->from;
             $to = request()->to;
 
-            $approval = Voucher::where('status', 1)->whereBetween('created_at', [$from, $to])->count();
-            $approved = Voucher::where('status', 2)->whereBetween('created_at', [$from, $to])->count();
+            if(auth()->user()->is_admin == 1){
+                $approval = Voucher::where('status', 1)->where('is_manager_approved', 1)->whereBetween('created_at', [$from, $to])->count();
+                $approved = Voucher::where('status', 2)->where('is_manager_approved', 1)->whereBetween('created_at', [$from, $to])->count();
+            }else{
+                $approval = Voucher::where('status', 1)->whereBetween('created_at', [$from, $to])->count();
+                $approved = Voucher::where('status', 2)->whereBetween('created_at', [$from, $to])->count();
+            }
+            $rejected = Voucher::where('status', 2)->whereBetween('created_at', [$from, $to])->count();
             $payments = Payment::whereBetween('created_at', [$from, $to])->sum('amount');
             if(!auth()->user()->is_admin){
                 $total_vouchers = auth()->user()->employee->vouchers()->whereBetween('created_at', [$from, $to])->count();
@@ -50,30 +58,74 @@ class DashboardController extends Controller
                 'approved'          => $approved,
                 'payments'          => $payments,
                 'total_vouchers'    => $total_vouchers,
+                'rejected'          => $rejected,
+                'drafted'           => $drafted,
             ]);
         }
 
         if(auth()->user()->is_admin) {
-            $approval = Voucher::orderBy('id', 'desc')
-            ->where('status', 1)
+
+            if(auth()->user()->is_admin == 1){
+                $approval = Voucher::orderBy('id', 'desc')
+                ->where('is_manager_approved', 1)
+                ->where('status', 1)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->count();
+
+                $approved = Voucher::orderBy('id', 'desc')
+                ->where('is_manager_approved', 1)
+                ->where('status', 2)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->count();
+            }else{
+                $approval = Voucher::orderBy('id', 'desc')
+                ->where('status', 1)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->count();
+
+                $approved = Voucher::orderBy('id', 'desc')
+                ->where('status', 2)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->count();
+            }
+
+
+            $rejected = Voucher::orderBy('id', 'desc')
+            ->where('status', 3)
             ->whereMonth('created_at', Carbon::now()->month)
             ->count();
 
-            $approved = Voucher::orderBy('id', 'desc')
-            ->where('status', 2)
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->count();
-
-            $employees = Employee::whereMonth('expiry_date', Carbon::now()->month)->get();
+            $employees = Employee::whereDate('expiry_date', '<=', Carbon::now()->addDays(7))->get();
 
             $payments = Payment::whereMonth('created_at', Carbon::now()->month)
             ->sum('amount');
         }else{
-            $total_vouchers = auth()->user()->employee->vouchers()->whereMonth('created_at', Carbon::now()->month)
+            $drafted = auth()->user()->employee->vouchers()
+            ->where('status', 0)
+            ->whereMonth('created_at', Carbon::now()->month)
             ->count();
+
+            $approval = auth()->user()->employee->vouchers()
+            ->where('status', 1)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+            $approved = auth()->user()->employee->vouchers()
+            ->where('status', 2)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+            $rejected = auth()->user()->employee->vouchers()
+            ->where('status', 3)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+            $total_vouchers = auth()->user()->employee->vouchers()
+            ->whereMonth('created_at', Carbon::now()
+            ->month)->count();
         }
 
-        return view('dashboard.index', compact('approval', 'approved', 'payments', 'total_vouchers', 'employees'));
+        return view('dashboard.index', compact('approval', 'approved', 'drafted', 'rejected', 'payments', 'total_vouchers', 'employees'));
     }
 
     /**

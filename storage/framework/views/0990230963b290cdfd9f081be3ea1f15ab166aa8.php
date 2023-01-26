@@ -1,7 +1,7 @@
-<?php $__env->startSection('title', 'List Of Vouchers Requested For Approval'); ?>
+<?php $__env->startSection('title', 'Users List - Abacus N Brain'); ?>
 
 <?php $__env->startSection('content_header'); ?>
-    <h1>List Of Vouchers Requested For Approval</h1>
+    <h1>Users List</h1>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -16,72 +16,80 @@
         <link rel="stylesheet" href="<?php echo e(asset('/dist/css/adminlte.min.css')); ?>">
     <?php $__env->stopPush(); ?>
     <div class="card px-3 py-1">
-        <!-- /.card-header -->
+        <div class="my-3">
+            <a class="btn btn-success float-right" href="<?php echo e(route('auth.register')); ?>">+ Create New User</a>
+        </div>
+
         <div class="card-body">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="min">From :</label>
-                        <input type="date" id="min" onfocus="this.showPicker()" value="<?php echo e(date('Y-m-01')); ?>"
-                            class="form-control">
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="max">To :</label>
-                        <input type="date" id="max" onfocus="this.showPicker()" value="<?php echo e(date('Y-m-d')); ?>"
-                            class="form-control">
-                    </div>
-                </div>
-            </div>
+            
             <table id="example1" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Employee Name</th>
-                        
-                        <th scope="col">Voucher Number</th>
-                        <th scope="col">Voucher Date</th>
-                        <th scope="col">Proposed Amount</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Account</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $vouchers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $voucher): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php
-                        $expenses = $voucher->expenses;
-                        $total_amt = 0.0;
-                        foreach ($expenses as $exp) {
-                            $total_amt += $exp->amount;
-                        }
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($user->is_admin): ?>
+                            <tr>
+                                <td>
+                                    <?php echo e($user->name); ?>
 
-                        ?>
-                        <tr>
-                            <td><?php echo e($voucher->employee()->first()->name); ?></td>
-                            
-                            <td><?php echo e($voucher->number); ?></td>
-                            <td>
-                                <?php if(isset($voucher->date)): ?>
-                                    <?php echo e($voucher->date->format('Y-m-d')); ?>
+                                </td>
+                                <td>
+                                    <?php echo e($user->email); ?>
 
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <span class="badge badge-primary px-2 py-2">
-                                    Rs. <?php echo e($total_amt); ?>
+                                </td>
+                                <td>
+                                    <?php if($user->active): ?>
+                                        <span class="badge badge-success px-2 py-2" style="font-size: 1rem;">
+                                            Active
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="badge badge-danger px-2 py-2" style="font-size: 1rem;">
+                                            Inactive
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            ACTIONS
+                                        </a>
 
-                                </span>
-                            </td>
-                            <td>
-                                <a class="btn btn-primary"
-                                    href="<?php echo e(route('employees.voucherDetails', ['id' => $voucher->id])); ?>">View</a>
-                            </td>
-                        </tr>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item text-primary"
+                                                href="<?php echo e(route('auth.edit', ['id' => $user->id])); ?>">Edit</a>
+                                            <?php if(auth()->user()->id !== $user->id): ?>
+                                                <div class="dropdown-divider"></div>
+                                                <?php if($user->active): ?>
+                                                    <a class="dropdown-item text-danger deactivateBtn"
+                                                        href="<?php echo e(route('auth.destroy', ['id' => $user->id])); ?>">
+                                                        Deactivate
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a class="dropdown-item text-success activateBtn"
+                                                        href="<?php echo e(route('auth.activate', ['id' => $user->id])); ?>">
+                                                        Activate
+                                                    </a>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
-
     </div>
+
     <?php $__env->startPush('js'); ?>
         <!-- DataTables  & Plugins -->
         <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
@@ -101,10 +109,9 @@
         <script>
             $(function() {
                 $("#example1").DataTable({
-                    "order": [[1, 'desc']],
-                    "oSearch": {
-                    "sSearch": "<?php echo e(date('Y-m')); ?>"
-                    },
+                    "order": [
+                        [1, 'desc']
+                    ],
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
@@ -122,11 +129,10 @@
 
                 $.fn.dataTable.ext.search.push(
                     function(settings, data, dataIndex) {
-                        $('input[type="search"]').val('').keyup();
                         var FilterStart = $('#min').val();
                         var FilterEnd = $('#max').val();
-                        var DataTableStart = data[2].trim();
-                        var DataTableEnd = data[2].trim();
+                        var DataTableStart = data[1].trim();
+                        var DataTableEnd = data[1].trim();
                         if (FilterStart == '' || FilterEnd == '') {
                             return true;
                         }
@@ -151,12 +157,16 @@
             });
         </script>
     <?php $__env->stopPush(); ?>
+
 <?php $__env->stopSection(); ?>
 
 
+<?php $__env->startPush('css'); ?>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+<?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('js'); ?>
-    <script src="<?php echo e(asset('js/tableFilter.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/authactdeact.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/employees/approval.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/auth/index.blade.php ENDPATH**/ ?>

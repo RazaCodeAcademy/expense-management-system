@@ -18,6 +18,7 @@ class CreateVouchersTable extends Migration
             $table->date('date');
             $table->string('special_remark')->nullable();
             $table->string('number')->nullable();
+            $table->boolean('is_manager_approved')->default(0);
             $table->date('approval_date')->nullable();
             $table->decimal('approved_amount')->nullable();
             $table->integer('status')->default(0);

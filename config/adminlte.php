@@ -289,7 +289,7 @@ return [
             'text'        => 'Logbook',
             'url'         => '/employees/logbook',
             'icon'        => 'fas fa-fw fa-money-bill-alt',
-            'can' => 'admin',
+            'can'         => ['admin', 'manager'],
         ],
 
         [
@@ -301,24 +301,24 @@ return [
         //     'url'  => '/settings',
         //     'icon' => 'fas fa-fw fa-user',
         // ],
-        [
-            'text'    => 'Jobs',
-            'icon'    => 'fas fa-fw fa-briefcase',
-            'submenu' => [
-                [
-                    'text'        => 'List Jobs',
-                    'url'         => '/jobs',
-                    'icon'        => 'fas fa-fw fa-briefcase',
-                    'can'         => 'admin',
-                ],
-                [
-                    'text' => 'Create Job',
-                    'url'  => '/jobs/create',
-                    'icon'    => 'fas fa-fw fa-briefcase',
-                ],
-            ],
-            'can'         => 'admin',
-        ],
+        // [
+        //     'text'    => 'Jobs',
+        //     'icon'    => 'fas fa-fw fa-briefcase',
+        //     'submenu' => [
+        //         [
+        //             'text'        => 'List Jobs',
+        //             'url'         => '/jobs',
+        //             'icon'        => 'fas fa-fw fa-briefcase',
+        //             'can'         => 'admin',
+        //         ],
+        //         [
+        //             'text' => 'Create Job',
+        //             'url'  => '/jobs/create',
+        //             'icon'    => 'fas fa-fw fa-briefcase',
+        //         ],
+        //     ],
+        //     'can'         => 'admin',
+        // ],
         [
             'text'    => 'Expense Categories',
             'icon'    => 'fas fa-fw fa-file-invoice',
@@ -334,7 +334,7 @@ return [
                     'icon'    => 'fas fa-fw fa-file-invoice',
                 ],
             ],
-            'can'         => 'admin',
+            'can'         => ['admin', 'manager'],
         ],
         [
             'text'    => 'Managers',
@@ -368,7 +368,7 @@ return [
                     'icon'    => 'fas fa-fw fa-users',
                 ],
             ],
-            'can'         => 'admin',
+            'can'         => ['admin', 'manager'],
         ],
         [
             'text'    => 'Admin Users',

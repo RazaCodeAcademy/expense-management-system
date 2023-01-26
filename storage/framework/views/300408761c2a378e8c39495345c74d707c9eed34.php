@@ -171,7 +171,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success" value="+ Add">
+                    <input type="submit" class="btn btn-success" value="+ Save & Continue" name="save_and_continue">
+                    <input type="submit" class="btn btn-info" value="+ Save & Exit" name="save_and_exist">
                 </div>
             </form>
         <?php endif; ?>
@@ -237,6 +238,7 @@
                         <th scope="col">Amount</th>
                         <th scope="col">Description</th>
                         <th scope="col">Bill</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -263,6 +265,9 @@
                                 <?php else: ?>
                                     <span class="badge badge-danger">Bill Not Provided</span>
                                 <?php endif; ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo e(route('vouchers.deleteExpense', $expense->id)); ?>" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+session_start();
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,16 +27,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('manager', function ($user) {
-            return $user['is_admin'] == 2;
-        });
-
         Gate::define('admin', function ($user) {
-            return $user['is_admin'] == 1;
+            return $user->is_admin == 1;
         });
 
         Gate::define('employee', function ($user) {
-            return $user['is_admin'] == 0;
+            return $user->is_admin == 0;
+        });
+
+        Gate::define('manager', function ($user) {
+            return $user->is_admin == 2;
         });
     }
 }

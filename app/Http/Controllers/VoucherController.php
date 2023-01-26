@@ -27,8 +27,10 @@ class VoucherController extends Controller
 {
     public function approvalRequests()
     {
-        if(auth()->user()->is_admin) {
-            $vouchers = Voucher::orderBy('id', 'desc')->where('status', 1)->get();
+        if(auth()->user()->is_admin==1) {
+            $vouchers = Voucher::where('status', 1)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
+        }elseif(auth()->user()->is_admin==2) {
+            $vouchers = Voucher::where('status', 1)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
             $vouchers = Voucher::orderBy('id', 'desc')->where('status', 1)->where('employee_id', $employee->id)->get();
@@ -39,7 +41,9 @@ class VoucherController extends Controller
 
     public function approvedVouchers()
     {
-        if(auth()->user()->is_admin) {
+        if(auth()->user()->is_admin==1) {
+            $vouchers = Voucher::where('status', 2)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
+        }elseif(auth()->user()->is_admin==2) {
             $vouchers = Voucher::where('status', 2)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
@@ -409,10 +413,16 @@ class VoucherController extends Controller
         $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
 
         $voucher = Voucher::findorfail($voucherId);
-        $voucher->update([
-            'status' => $status,
-            'special_remark' => $special_remark,
-        ]);
+        if(auth()->user()->is_admin == 2){
+            $voucher->update([
+                'is_manager_approved' => 1,
+            ]);
+        }else{
+            $voucher->update([
+                'status' => $status,
+                'special_remark' => $special_remark,
+            ]);
+        }
         $voucher->save();
 
         $employee = $voucher->employee()->first();
@@ -805,7 +815,6 @@ class VoucherController extends Controller
 
     public function createExpense(Request $request, $id)
     {
-        // return $request;
         $request->flash();
 
         $this->validate($request, [
@@ -873,7 +882,11 @@ class VoucherController extends Controller
         $expense->expensecategory()->associate($expensecategory);
         $expense->save();
 
-        return redirect(route('vouchers.edit', ['id' => $voucher->id]));
+        if($request->save_and_continue){
+            return redirect(route('vouchers.edit', ['id' => $voucher->id]));
+        }
+
+        return redirect(route('vouchers.draft'));
     }
 
     public function updateExpense(Request $request, $id)
@@ -954,6 +967,24 @@ class VoucherController extends Controller
         ]);
     }
 
+    public function deleteExpense($expenseId)
+    {
+        // This will respond to fetch API request
+        $expense = Expense::findorfail($expenseId);
+
+        $old_bills = Bill::where('expense_id', $expense->id)->get();
+        foreach ($old_bills as $old_bill) {
+            $file_path = public_path('storage/bill/' . $old_bill->file_name);
+            @unlink($file_path);
+
+            $old_bill->delete();
+        }
+        $expense->delete();
+
+        return redirect()->back();
+    }
+
+
     public function askForApproval($id)
     {
         // This will respond to fetch API request
@@ -961,6 +992,7 @@ class VoucherController extends Controller
         // $voucherId = json_decode($request->getContent(), true)['voucher_id'];
         $voucher = Voucher::findorfail($id);
         $employee = $voucher->employee;
+
         $voucher->update([
             'status' => 1,
         ]);
