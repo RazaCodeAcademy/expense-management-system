@@ -36,4 +36,4 @@
         </div>
     </body>
 </html>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\laravel\framework\src\Illuminate\Foundation\Exceptions/views/minimal.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/minimal.blade.php ENDPATH**/ ?>

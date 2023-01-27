@@ -31,7 +31,10 @@
         <?php echo $__env->make('adminlte::plugins', ['type' => 'css'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         <link rel="stylesheet" href="<?php echo e(asset('vendor/adminlte/dist/css/adminlte.min.css')); ?>">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+        <?php if(config('adminlte.google_fonts.allowed', true)): ?>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <?php endif; ?>
     <?php else: ?>
         <link rel="stylesheet" href="<?php echo e(mix(config('adminlte.laravel_mix_css_path', 'css/app.css'))); ?>">
     <?php endif; ?>
@@ -66,7 +69,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="<?php echo e(asset('favicons/favicon-32x32.png')); ?>">
         <link rel="icon" type="image/png" sizes="96x96" href="<?php echo e(asset('favicons/favicon-96x96.png')); ?>">
         <link rel="icon" type="image/png" sizes="192x192"  href="<?php echo e(asset('favicons/android-icon-192x192.png')); ?>">
-        <link rel="manifest" href="<?php echo e(asset('favicons/manifest.json')); ?>">
+        <link rel="manifest" crossorigin="use-credentials" href="<?php echo e(asset('favicons/manifest.json')); ?>">
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="<?php echo e(asset('favicon/ms-icon-144x144.png')); ?>">
     <?php endif; ?>
@@ -107,4 +110,4 @@
 </body>
 
 </html>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/master.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/master.blade.php ENDPATH**/ ?>

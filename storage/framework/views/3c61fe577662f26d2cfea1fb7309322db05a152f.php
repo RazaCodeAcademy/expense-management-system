@@ -9,7 +9,7 @@
 
     
     <div class="sidebar">
-        <nav class="mt-2">
+        <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column <?php echo e(config('adminlte.classes_sidebar_nav', '')); ?>"
                 data-widget="treeview" role="menu"
                 <?php if(config('adminlte.sidebar_nav_animation_speed') != 300): ?>
@@ -25,4 +25,4 @@
     </div>
 
 </aside>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/sidebar/left-sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/sidebar/left-sidebar.blade.php ENDPATH**/ ?>

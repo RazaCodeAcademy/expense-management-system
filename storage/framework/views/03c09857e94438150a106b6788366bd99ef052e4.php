@@ -1,11 +1,5 @@
 <?php $layoutHelper = app('JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper'); ?>
 
-<?php if($layoutHelper->isLayoutTopnavEnabled()): ?>
-    <?php ( $def_container_class = 'container' ); ?>
-<?php else: ?>
-    <?php ( $def_container_class = 'container-fluid' ); ?>
-<?php endif; ?>
-
 <?php $__env->startSection('adminlte_css'); ?>
     <?php echo $__env->yieldPushContent('css'); ?>
     <?php echo $__env->yieldContent('css'); ?>
@@ -17,6 +11,11 @@
 
 <?php $__env->startSection('body'); ?>
     <div class="wrapper">
+
+        
+        <?php if($layoutHelper->isPreloaderEnabled()): ?>
+            <?php echo $__env->make('adminlte::partials.common.preloader', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
 
         
         <?php if($layoutHelper->isLayoutTopnavEnabled()): ?>
@@ -31,23 +30,11 @@
         <?php endif; ?>
 
         
-        <div class="content-wrapper <?php echo e(config('adminlte.classes_content_wrapper') ?? ''); ?>">
-
-            
-            <div class="content-header">
-                <div class="<?php echo e(config('adminlte.classes_content_header') ?: $def_container_class); ?>">
-                    <?php echo $__env->yieldContent('content_header'); ?>
-                </div>
-            </div>
-
-            
-            <div class="content">
-                <div class="<?php echo e(config('adminlte.classes_content') ?: $def_container_class); ?>">
-                    <?php echo $__env->yieldContent('content'); ?>
-                </div>
-            </div>
-
-        </div>
+        <?php if(empty($iFrameEnabled)): ?>
+            <?php echo $__env->make('adminlte::partials.cwrapper.cwrapper-default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php else: ?>
+            <?php echo $__env->make('adminlte::partials.cwrapper.cwrapper-iframe', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php endif; ?>
 
         
         <?php if (! empty(trim($__env->yieldContent('footer')))): ?>
@@ -67,4 +54,4 @@
     <?php echo $__env->yieldContent('js'); ?>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/page.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/page.blade.php ENDPATH**/ ?>

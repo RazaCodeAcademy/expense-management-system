@@ -26,4 +26,4 @@
          class="<?php echo e(config('adminlte.logo_img_xl_class', 'brand-image-xs')); ?> logo-xl">
 
 </a>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/common/brand-logo-xl.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/common/brand-logo-xl.blade.php ENDPATH**/ ?>

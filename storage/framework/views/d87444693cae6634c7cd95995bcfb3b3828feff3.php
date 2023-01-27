@@ -67,14 +67,14 @@
         <li class="user-footer">
             <?php if($profile_url): ?>
                 <a href="<?php echo e($profile_url); ?>" class="btn btn-default btn-flat">
-                    <i class="fa fa-fw fa-user"></i>
+                    <i class="fa fa-fw fa-user text-lightblue"></i>
                     <?php echo e(__('adminlte::menu.profile')); ?>
 
                 </a>
             <?php endif; ?>
             <a class="btn btn-default btn-flat float-right <?php if(!$profile_url): ?> btn-block <?php endif; ?>"
                href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fa fa-fw fa-power-off"></i>
+                <i class="fa fa-fw fa-power-off text-red"></i>
                 <?php echo e(__('adminlte::adminlte.log_out')); ?>
 
             </a>
@@ -91,4 +91,4 @@
     </ul>
 
 </li>
-<?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\vendor\jeroennoten\laravel-adminlte\src/../resources/views/partials/navbar/menu-item-dropdown-user-menu.blade.php ENDPATH**/ ?>
+<?php /**PATH /Users/raza/Projects/my-projects/expense-management-system/vendor/jeroennoten/laravel-adminlte/src/../resources/views/partials/navbar/menu-item-dropdown-user-menu.blade.php ENDPATH**/ ?>
