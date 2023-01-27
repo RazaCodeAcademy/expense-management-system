@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 $approval = Voucher::where('status', 1)->where('is_manager_approved', 1)->whereBetween('created_at', [$from, $to])->count();
                 $approved = Voucher::where('status', 2)->where('is_manager_approved', 1)->whereBetween('created_at', [$from, $to])->count();
             }else{
-                $approval = Voucher::where('status', 1)->whereBetween('created_at', [$from, $to])->count();
+                $approval = Voucher::where('status', 1)->where('is_manager_approved', 0)->whereBetween('created_at', [$from, $to])->count();
                 $approved = Voucher::where('status', 2)->whereBetween('created_at', [$from, $to])->count();
             }
             $rejected = Voucher::where('status', 2)->whereBetween('created_at', [$from, $to])->count();
@@ -79,6 +79,7 @@ class DashboardController extends Controller
                 ->count();
             }else{
                 $approval = Voucher::orderBy('id', 'desc')
+                ->where('is_manager_approved', 0)
                 ->where('status', 1)
                 ->whereMonth('created_at', Carbon::now()->month)
                 ->count();
@@ -111,6 +112,7 @@ class DashboardController extends Controller
             ->count();
 
             $approved = auth()->user()->employee->vouchers()
+            ->where('is_manager_approved', 1)
             ->where('status', 2)
             ->whereMonth('created_at', Carbon::now()->month)
             ->count();

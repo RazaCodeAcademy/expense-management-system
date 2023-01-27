@@ -30,7 +30,7 @@ class VoucherController extends Controller
         if(auth()->user()->is_admin==1) {
             $vouchers = Voucher::where('status', 1)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
         }elseif(auth()->user()->is_admin==2) {
-            $vouchers = Voucher::where('status', 1)->get()->sortByDesc('approval_date');
+            $vouchers = Voucher::where('status', 1)->where('is_manager_approved', 0)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
             $vouchers = Voucher::orderBy('id', 'desc')->where('status', 1)->where('employee_id', $employee->id)->get();
@@ -711,7 +711,10 @@ class VoucherController extends Controller
 
     public function draft()
     {
-        $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)->where('status', 0)->get();
+        $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)
+        ->whereHas('expenses', function($q){
+            return $q->havingRaw('sum(amount) > 0');
+        })->where('status', 0)->get();
 
         return view('vouchers.draft', compact('vouchers'));
     }
