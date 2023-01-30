@@ -17,11 +17,15 @@ use App\Models\Voucher;
 use App\Models\Logbook;
 use Carbon\Carbon;
 use Exception;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+
+use ZipArchive;
+use File;
 
 class VoucherController extends Controller
 {
@@ -44,10 +48,10 @@ class VoucherController extends Controller
         if(auth()->user()->is_admin==1) {
             $vouchers = Voucher::where('status', 2)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
         }elseif(auth()->user()->is_admin==2) {
-            $vouchers = Voucher::where('status', 2)->get()->sortByDesc('approval_date');
+            $vouchers = Voucher::where('status', 2)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
-            $vouchers = Voucher::where('status', 2)->where('employee_id', $employee->id)->get()->sortByDesc('approval_date');
+            $vouchers = Voucher::where('status', 2)->where('employee_id', $employee->id)->where('is_manager_approved', 1)->get()->sortByDesc('approval_date');
         }
 
         return view('employees.approved', compact('vouchers'));
@@ -73,6 +77,47 @@ class VoucherController extends Controller
         $jobs = Job::all();
 
         return view('employees.details', compact('voucher', 'expenseCategories', 'jobs', 'expenses'));
+    }
+
+    public function zipFile(){
+        $file = downloadZip();
+        return response()->download($file);
+    }
+
+    public function downloadZip($id)
+    {
+        $voucher = Voucher::findorfail($id);
+        $expenses = $voucher->expenses()->get();
+        $imgarr = [];
+
+        foreach ($expenses as $expense){
+            // $bills .= "<strong>Bill :</strong>";
+            foreach ($expense->bills as $bill){
+                $imgarr[] = public_path().'/storage/bill/' . $bill->file_name; // asset('storage/bill/' . $bill->file_name);
+            }
+        }
+
+        $zip = new ZipArchive;
+
+        $fileName = "voucher_".$id.".zip";
+
+        if(count($imgarr) <= 0){
+            return back();
+        }
+
+        if ($zip->open(public_path('storage/'.$fileName), ZipArchive::CREATE))
+        {
+   			// loop the files result
+            foreach ($imgarr as $key => $value) {
+                $relativeNameInZipFile = basename($value);
+                $zip->addFile($value, $relativeNameInZipFile);
+            }
+
+            $zip->close();
+        }
+
+        return response()->download(public_path('storage/'.$fileName));
+
     }
 
     public function generateHtmlContent($voucher)
@@ -713,7 +758,7 @@ class VoucherController extends Controller
     {
         $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)
         ->whereHas('expenses', function($q){
-            return $q->havingRaw('sum(amount) > 0');
+            return $q->havingRaw('sum(amount) > 0')->groupBy('id');
         })->where('status', 0)->get();
 
         return view('vouchers.draft', compact('vouchers'));

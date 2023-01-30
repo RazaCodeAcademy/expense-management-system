@@ -228,9 +228,12 @@
                         </td>
                         <td colspan="2"></td>
                         <td>
-                            <button class="btn btn-primary" id="downloadAllBillsBtn">
+                            <button class="btn btn-primary" onclick="downloadBillInPdf('{{ route('downloadZip', request('id')) }}')">
                                 Download All Bills
                             </button>
+                            {{-- <button class="btn btn-primary" id="downloadAllBillsBtn" onclick="downloadBillInPdf()">
+                                Download All Bills
+                            </button> --}}
                         </td>
                     </tr>
                     <tr class="table-warning" style="font-size: 1.2rem;">
@@ -516,6 +519,10 @@
     <script>
         const ele = (id) => {
             return document.getElementById(id);
+        }
+
+        const downloadBillInPdf = (url) => {
+            window.location=url;
         }
 
         window.onload = () => {

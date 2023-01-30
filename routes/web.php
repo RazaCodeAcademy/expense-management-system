@@ -38,6 +38,9 @@ Route::get('/clear', function(){
     return "All cache has been cleared!";
 });
 
+Route::get('/pdf', [VoucherController::class, 'generatePdf']);
+Route::get('/downloadZip/{id}', [VoucherController::class, 'downloadZip'])->name('downloadZip');
+
 // auth routes
 Route::group(['prefix' => '/auth'], function () {
     Route::get('/index', [AuthController::class, 'index'])->name('auth.index')->middleware('auth');

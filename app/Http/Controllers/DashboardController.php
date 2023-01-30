@@ -102,6 +102,9 @@ class DashboardController extends Controller
             ->sum('amount');
         }else{
             $drafted = auth()->user()->employee->vouchers()
+            ->whereHas('expenses', function($q){
+                return $q->havingRaw('sum(amount) > 0')->groupBy('id');
+            })
             ->where('status', 0)
             ->whereMonth('created_at', Carbon::now()->month)
             ->count();
