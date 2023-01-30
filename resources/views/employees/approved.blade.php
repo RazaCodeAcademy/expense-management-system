@@ -120,7 +120,7 @@
         <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ asset('/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
         <!-- AdminLTE App -->
-        <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+        {{-- <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script> --}}
         <script>
             $(function() {
                 var Table = $("#example1").DataTable({

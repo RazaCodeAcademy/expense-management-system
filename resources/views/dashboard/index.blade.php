@@ -179,7 +179,7 @@
     @endif
 
     @push('js')
-    
+
         <!-- DataTables  & Plugins -->
         <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -194,7 +194,7 @@
         <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ asset('/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
         <!-- AdminLTE App -->
-        <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+        {{-- <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script> --}}
         <script>
             $(function() {
                 $("#example1").DataTable({
@@ -268,7 +268,9 @@
                             if (ele('approval')) {
                                 ele('approval').innerText = res.approval;
                                 ele('approved').innerText = res.approved;
-                                ele('payments').innerText = res.payments;
+                                if(ele('payments')){
+                                    ele('payments').innerText = res.payments;
+                                }
                             } else {
                                 ele('total_vouchers').innerText = res.total_vouchers;
                             }
@@ -277,7 +279,7 @@
                 }
             }
 
-            var browser = require("webextension-polyfill");
+            // var browser = require("webextension-polyfill");
         </script>
     @endpush
 

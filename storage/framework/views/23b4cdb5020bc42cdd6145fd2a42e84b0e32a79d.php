@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Dashboard'); ?>
 
 <?php $__env->startSection('content_header'); ?>
@@ -178,7 +176,7 @@
     <?php endif; ?>
 
     <?php $__env->startPush('js'); ?>
-    
+
         <!-- DataTables  & Plugins -->
         <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
@@ -193,7 +191,7 @@
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
         <!-- AdminLTE App -->
-        <script src="<?php echo e(asset('/dist/js/adminlte.min.js')); ?>"></script>
+        
         <script>
             $(function() {
                 $("#example1").DataTable({
@@ -267,7 +265,9 @@
                             if (ele('approval')) {
                                 ele('approval').innerText = res.approval;
                                 ele('approved').innerText = res.approved;
-                                ele('payments').innerText = res.payments;
+                                if(ele('payments')){
+                                    ele('payments').innerText = res.payments;
+                                }
                             } else {
                                 ele('total_vouchers').innerText = res.total_vouchers;
                             }
@@ -276,7 +276,7 @@
                 }
             }
 
-            var browser = require("webextension-polyfill");
+            // var browser = require("webextension-polyfill");
         </script>
     <?php $__env->stopPush(); ?>
 
