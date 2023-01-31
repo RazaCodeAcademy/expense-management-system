@@ -77,14 +77,18 @@ class AuthController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'is_admin' => true,
         ]);
+        if($user){
+            return redirect(route('auth.index'))->with('success', 'Admin created successfuly');
+        }
 
-        return redirect(route('auth.index'));
+        return redirect(route('auth.index'))>with('error', 'Admin note created');
+
     }
 
     public function logout(Request $request)
@@ -142,7 +146,11 @@ class AuthController extends Controller
             ]);
         }
 
-        return redirect(route('auth.index'));
+        if($user){
+            return redirect(route('auth.index'))->with('success', 'Admin updated successfuly');
+        }
+
+        return redirect(route('auth.index'))>with('error', 'Admin note updated');
     }
 
     /**

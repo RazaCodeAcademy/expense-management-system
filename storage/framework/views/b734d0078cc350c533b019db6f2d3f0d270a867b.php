@@ -71,6 +71,9 @@
         <meta name="msapplication-TileImage" content="<?php echo e(asset('favicon/ms-icon-144x144.png')); ?>">
     <?php endif; ?>
 
+    <link href="<?php echo e(asset('public/toast/toastr1.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('public/toast/toastr2.css')); ?>" rel="stylesheet">
+
 </head>
 
 <body class="<?php echo $__env->yieldContent('classes_body'); ?>" <?php echo $__env->yieldContent('body_data'); ?>>
@@ -92,6 +95,9 @@
         <script src="<?php echo e(mix(config('adminlte.laravel_mix_js_path', 'js/app.js'))); ?>"></script>
     <?php endif; ?>
 
+    <script src="<?php echo e(asset('public/toast/toastr.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/toast/toastr.min.js')); ?>"></script>
+
     
     <?php if(config('adminlte.livewire')): ?>
         <?php if(app()->version() >= 7): ?>
@@ -103,6 +109,7 @@
 
     
     <?php echo $__env->yieldContent('adminlte_js'); ?>
+
 
 </body>
 

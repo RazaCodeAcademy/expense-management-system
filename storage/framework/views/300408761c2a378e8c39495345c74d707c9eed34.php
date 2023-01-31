@@ -6,6 +6,8 @@
 
 <?php $__env->startSection('content'); ?>
     <?php $__env->startPush('css'); ?>
+    <link href="<?php echo e(asset('/toast/toastr1.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/toast/toastr2.css')); ?>" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"
             integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -478,6 +480,22 @@
     <script src="<?php echo e(asset('js/downloadfiles.js')); ?>"></script>
     <script src="<?php echo e(asset('js/approval.js')); ?>"></script>
     <script src="<?php echo e(asset('js/s2.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+    <?php if(Session::has('success')): ?>
+    
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.success('<?php echo e(Session::get('success')); ?>')
+        </script>
+    <?php endif; ?>
+
+    <?php if(Session::has('error')): ?>
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.error('<?php echo e(Session::get('error')); ?>')
+        </script>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/vouchers/edit.blade.php ENDPATH**/ ?>

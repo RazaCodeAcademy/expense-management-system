@@ -147,7 +147,11 @@ class EmployeeController extends Controller
         $user->employee()->save($employee);
         $user->save();
 
-        return redirect(route('employees.index'));
+        if($user){
+            return redirect(route('employees.index'))->with('success', 'Employee created successfuly');
+        }
+
+        return redirect(route('employees.index'))>with('error', 'Employee note created');
     }
 
     public function addbalance(Request $request, $id)
@@ -412,7 +416,11 @@ class EmployeeController extends Controller
             ]);
         }
 
-        return redirect(route('employees.index'));
+        if($user){
+            return redirect(route('employees.index'))->with('success', 'Employee updated successfuly');
+        }
+
+        return redirect(route('employees.index'))>with('error', 'Employee note updated');
     }
 
     public function wallet()

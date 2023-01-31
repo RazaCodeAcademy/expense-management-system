@@ -359,9 +359,7 @@
                     Approval is not yet requested by the author of this voucher!
                 </div>
             <?php elseif($voucher->status === 1): ?>
-                <button class="btn btn-warning" id="saveVoucherDraftBtn">
-                    <i class="fas fa-save"></i> Save Draft
-                </button>
+                
                 <button class="btn btn-success" id="approveVoucherBtn">
                     <i class="fas fa-check"></i> Approve
                 </button>

@@ -931,7 +931,7 @@ class VoucherController extends Controller
         $expense->save();
 
         if($request->save_and_continue){
-            return redirect(route('vouchers.edit', ['id' => $voucher->id]));
+            return redirect(route('vouchers.edit', ['id' => $voucher->id]))->with('success', 'Expense created successfuly!');
         }
 
         return redirect(route('vouchers.draft'));
@@ -1027,9 +1027,11 @@ class VoucherController extends Controller
 
             $old_bill->delete();
         }
-        $expense->delete();
+        if($expense->delete()){
+            return redirect()->back()->with('success', 'Expense deleted successfuly');
+        }
 
-        return redirect()->back();
+        return redirect()->back()->with('error', 'Expense not deleted');
     }
 
 
@@ -1056,7 +1058,7 @@ class VoucherController extends Controller
             $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
         });
 
-        return back();
+        return back()->with('success', 'You successfuly applied for approval');
 
         // return response()->json([
         //     'process' => 'success',

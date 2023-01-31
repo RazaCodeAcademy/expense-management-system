@@ -43,11 +43,15 @@ class ExpenseCategoryController extends Controller
             'name' => 'required',
         ]);
 
-        ExpenseCategory::create([
+        $cat = ExpenseCategory::create([
             'name' => $request->input('name')
         ]);
 
-        return redirect(route('expensecategories.index'));
+        if($cat){
+            return redirect(route('expensecategories.index'))->with('success', 'Category created successfuly');
+        }
+
+        return redirect(route('expensecategories.index'))->with('success', 'Category note created');
     }
 
     /**
@@ -82,7 +86,11 @@ class ExpenseCategoryController extends Controller
             'name' => $request->input('name')
         ]);
 
-        return redirect(route('expensecategories.index'));
+        if($expensecategory){
+            return redirect(route('expensecategories.index'))->with('success', 'Category updated successfuly');
+        }
+
+        return redirect(route('expensecategories.index'))->with('success', 'Category note updated');
     }
 
     /**

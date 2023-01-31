@@ -35,14 +35,18 @@ class ManagerController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        User::create([
+       $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'is_admin' => 2,
         ]);
+        if($user){
+            return redirect(route('managers.index'))->with('success', 'Manager created successfuly');
+        }
 
-        return redirect(route('managers.index'));
+        return redirect(route('managers.index'))>with('error', 'Manager note created');
+
     }
 
     public function logout(Request $request)
@@ -100,7 +104,11 @@ class ManagerController extends Controller
             ]);
         }
 
-        return redirect(route('managers.index'));
+        if($user){
+            return redirect(route('managers.index'))->with('success', 'Manager updated successfuly');
+        }
+
+        return redirect(route('managers.index'))>with('error', 'Manager note updated');
     }
 
     /**

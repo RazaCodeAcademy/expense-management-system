@@ -6,6 +6,8 @@
 
 <?php $__env->startSection('content'); ?>
     <?php $__env->startPush('css'); ?>
+    <link href="<?php echo e(asset('/toast/toastr1.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/toast/toastr2.css')); ?>" rel="stylesheet">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="<?php echo e(asset('/plugins/fontawesome-free/css/all.min.css')); ?>">
         <!-- DataTables -->
@@ -161,7 +163,7 @@
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
         <!-- AdminLTE App -->
-        <script src="<?php echo e(asset('/dist/js/adminlte.min.js')); ?>"></script>
+        
         <script>
             $(function() {
                 $("#example1").DataTable({
@@ -213,6 +215,22 @@
                 });
             });
         </script>
+        <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+        <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+        <?php if(Session::has('success')): ?>
+        
+            <script>
+                toastr.options.positionClass = 'toast-top-right';
+                toastr.success('<?php echo e(Session::get('success')); ?>')
+            </script>
+        <?php endif; ?>
+
+        <?php if(Session::has('error')): ?>
+            <script>
+                toastr.options.positionClass = 'toast-top-right';
+                toastr.error('<?php echo e(Session::get('error')); ?>')
+            </script>
+        <?php endif; ?>
     <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>

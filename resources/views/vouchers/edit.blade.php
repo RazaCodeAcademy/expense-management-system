@@ -8,6 +8,22 @@
 
 @section('content')
     @push('css')
+    <script src="{{asset('/toast/toastr.js')}}"></script>
+    <script src="{{asset('/toast/toastr.min.js')}}"></script>
+    @if(Session::has('success'))
+    {{-- @dd(Session::has('success')) --}}
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.success('{{  Session::get('success') }}')
+        </script>
+    @endif
+
+    @if(Session::has('error'))
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.error('{{  Session::get('error') }}')
+        </script>
+    @endif
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"
             integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -517,4 +533,20 @@
     <script src="{{ asset('js/downloadfiles.js') }}"></script>
     <script src="{{ asset('js/approval.js') }}"></script>
     <script src="{{ asset('js/s2.js') }}"></script>
+    <script src="{{asset('/toast/toastr.js')}}"></script>
+    <script src="{{asset('/toast/toastr.min.js')}}"></script>
+    @if(Session::has('success'))
+    {{-- @dd(Session::has('success')) --}}
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.success('{{  Session::get('success') }}')
+        </script>
+    @endif
+
+    @if(Session::has('error'))
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.error('{{  Session::get('error') }}')
+        </script>
+    @endif
 @stop

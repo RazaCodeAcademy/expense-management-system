@@ -116,7 +116,7 @@
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
         <!-- AdminLTE App -->
-        <script src="<?php echo e(asset('/dist/js/adminlte.min.js')); ?>"></script>
+        
         <script>
             $(function() {
                 var Table = $("#example1").DataTable({

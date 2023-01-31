@@ -470,9 +470,9 @@
                     Approval is not yet requested by the author of this voucher!
                 </div>
             @elseif($voucher->status === 1)
-                <button class="btn btn-warning" id="saveVoucherDraftBtn">
+                {{-- <button class="btn btn-warning" id="saveVoucherDraftBtn">
                     <i class="fas fa-save"></i> Save Draft
-                </button>
+                </button> --}}
                 <button class="btn btn-success" id="approveVoucherBtn">
                     <i class="fas fa-check"></i> Approve
                 </button>

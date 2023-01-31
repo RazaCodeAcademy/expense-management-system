@@ -1,44 +1,29 @@
-@extends('adminlte::page')
+<?php $__env->startSection('title', 'Users List - Abacus N Brain'); ?>
 
-@section('title', 'Users List - Abacus N Brain')
-
-@section('content_header')
+<?php $__env->startSection('content_header'); ?>
     <h1>Users List</h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @push('css')
-    <link href="{{asset('/toast/toastr1.css')}}" rel="stylesheet">
-    <link href="{{asset('/toast/toastr2.css')}}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startPush('css'); ?>
+    <link href="<?php echo e(asset('/toast/toastr1.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/toast/toastr2.css')); ?>" rel="stylesheet">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/fontawesome-free/css/all.min.css')); ?>">
         <!-- DataTables -->
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')); ?>">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')); ?>">
+        <link rel="stylesheet" href="<?php echo e(asset('/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')); ?>">
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
-    @endpush
+        <link rel="stylesheet" href="<?php echo e(asset('/dist/css/adminlte.min.css')); ?>">
+    <?php $__env->stopPush(); ?>
     <div class="card px-3 py-1">
         <div class="my-3">
-            <a class="btn btn-success float-right" href="{{ route('managers.create') }}">+ Create New User</a>
+            <a class="btn btn-success float-right" href="<?php echo e(route('managers.create')); ?>">+ Create New User</a>
         </div>
 
         <div class="card-body">
-            {{-- <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="min">From :</label>
-                        <input type="date" id="min" class="form-control">
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="max">To :</label>
-                        <input type="date" id="max" class="form-control">
-                    </div>
-                </div>
-            </div> --}}
+            
             <table id="example1" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -49,25 +34,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
-                        @if ($user->is_admin == 2)
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($user->is_admin == 2): ?>
                             <tr>
                                 <td>
-                                    {{ $user->name }}
+                                    <?php echo e($user->name); ?>
+
                                 </td>
                                 <td>
-                                    {{ $user->email }}
+                                    <?php echo e($user->email); ?>
+
                                 </td>
                                 <td>
-                                    @if ($user->active)
+                                    <?php if($user->active): ?>
                                         <span class="badge badge-success px-2 py-2" style="font-size: 1rem;">
                                             Active
                                         </span>
-                                    @else
+                                    <?php else: ?>
                                         <span class="badge badge-danger px-2 py-2" style="font-size: 1rem;">
                                             Inactive
                                         </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -79,48 +66,48 @@
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a class="dropdown-item text-primary"
-                                                href="{{ route('managers.edit', ['id' => $user->id]) }}">Edit</a>
-                                            @if (auth()->user()->id !== $user->id)
+                                                href="<?php echo e(route('managers.edit', ['id' => $user->id])); ?>">Edit</a>
+                                            <?php if(auth()->user()->id !== $user->id): ?>
                                                 <div class="dropdown-divider"></div>
-                                                @if ($user->active)
+                                                <?php if($user->active): ?>
                                                     <a class="dropdown-item text-danger deactivateBtn"
-                                                        href="{{ route('managers.destroy', ['id' => $user->id]) }}">
+                                                        href="<?php echo e(route('managers.destroy', ['id' => $user->id])); ?>">
                                                         Deactivate
                                                     </a>
-                                                @else
+                                                <?php else: ?>
                                                     <a class="dropdown-item text-success activateBtn"
-                                                        href="{{ route('managers.activate', ['id' => $user->id]) }}">
+                                                        href="<?php echo e(route('managers.activate', ['id' => $user->id])); ?>">
                                                         Activate
                                                     </a>
-                                                @endif
-                                            @endif
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                        @endif
-                    @endforeach
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
     </div>
 
-    @push('js')
+    <?php $__env->startPush('js'); ?>
         <!-- DataTables  & Plugins -->
-        <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('/plugins/jszip/jszip.min.js') }}"></script>
-        <script src="{{ asset('/plugins/pdfmake/pdfmake.min.js') }}"></script>
-        <script src="{{ asset('/plugins/pdfmake/vfs_fonts.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-        <script src="{{ asset('/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+        <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-responsive/js/dataTables.responsive.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/dataTables.buttons.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/jszip/jszip.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/pdfmake/pdfmake.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/pdfmake/vfs_fonts.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.html5.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
         <!-- AdminLTE App -->
-        {{-- <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script> --}}
+        
         <script>
             $(function() {
                 $("#example1").DataTable({
@@ -171,31 +158,33 @@
                 });
             });
         </script>
-        <script src="{{asset('/toast/toastr.js')}}"></script>
-        <script src="{{asset('/toast/toastr.min.js')}}"></script>
-        @if(Session::has('success'))
-        {{-- @dd(Session::has('success')) --}}
+        <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+        <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+        <?php if(Session::has('success')): ?>
+        
             <script>
                 toastr.options.positionClass = 'toast-top-right';
-                toastr.success('{{  Session::get('success') }}')
+                toastr.success('<?php echo e(Session::get('success')); ?>')
             </script>
-        @endif
+        <?php endif; ?>
 
-        @if(Session::has('error'))
+        <?php if(Session::has('error')): ?>
             <script>
                 toastr.options.positionClass = 'toast-top-right';
-                toastr.error('{{  Session::get('error') }}')
+                toastr.error('<?php echo e(Session::get('error')); ?>')
             </script>
-        @endif
-    @endpush
+        <?php endif; ?>
+    <?php $__env->stopPush(); ?>
 
-@stop
+<?php $__env->stopSection(); ?>
 
 
-@push('css')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endpush
+<?php $__env->startPush('css'); ?>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+<?php $__env->stopPush(); ?>
 
-@section('js')
-    <script src="{{ asset('js/authactdeact.js') }}"></script>
-@stop
+<?php $__env->startSection('js'); ?>
+    <script src="<?php echo e(asset('js/authactdeact.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/managers/index.blade.php ENDPATH**/ ?>
