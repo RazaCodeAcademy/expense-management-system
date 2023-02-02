@@ -356,7 +356,7 @@
 
         <hr> --}}
 
-        @if ($voucher->status === 1)
+        @if (($voucher->status === 1 && auth()->user()->is_admin == 1) || ($voucher->status === 1 && auth()->user()->is_admin == 2 && $voucher->is_manager_approved != 1))
             <div class="row">
                 <div class="col-sm-4">
                     <label for="special_remark">Voucher Special Remark:</label>
@@ -423,7 +423,7 @@
             </form>
         @endif
 
-        @if ($voucher->status > 1)
+        @if ($voucher->status > 1 || (auth()->user()->is_admin == 2 && $voucher->is_manager_approved == 1))
             <?php
             $perCategoryTotal = [];
             foreach ($expenseCategories as $category) {
@@ -473,12 +473,25 @@
                 {{-- <button class="btn btn-warning" id="saveVoucherDraftBtn">
                     <i class="fas fa-save"></i> Save Draft
                 </button> --}}
-                <button class="btn btn-success" id="approveVoucherBtn">
-                    <i class="fas fa-check"></i> Approve
-                </button>
-                <button class="btn btn-danger" id="rejectVoucherBtn">
-                    <i class="fas fa-times"></i> Reject
-                </button>
+
+                @if ((auth()->user()->is_admin == 2 && $voucher->is_manager_approved == 1))
+                    <div class="alert alert-success" role="alert">
+                        This voucher has been approved!
+                        @if (auth()->user()->is_admin)
+                            <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
+                                class="btn btn-secondary ml-2">
+                                <i class="fas fa-print"></i> Print Report
+                            </a>
+                        @endif
+                    </div>
+                @else
+                    <button class="btn btn-success" id="approveVoucherBtn">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button class="btn btn-danger" id="rejectVoucherBtn">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                @endif
             @elseif($voucher->status === 2)
                 <div class="alert alert-success" role="alert">
                     This voucher has been approved!

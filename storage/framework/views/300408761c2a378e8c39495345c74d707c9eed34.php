@@ -6,8 +6,22 @@
 
 <?php $__env->startSection('content'); ?>
     <?php $__env->startPush('css'); ?>
-    <link href="<?php echo e(asset('/toast/toastr1.css')); ?>" rel="stylesheet">
-    <link href="<?php echo e(asset('/toast/toastr2.css')); ?>" rel="stylesheet">
+    <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+    <?php if(Session::has('success')): ?>
+    
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.success('<?php echo e(Session::get('success')); ?>')
+        </script>
+    <?php endif; ?>
+
+    <?php if(Session::has('error')): ?>
+        <script>
+            toastr.options.positionClass = 'toast-top-right';
+            toastr.error('<?php echo e(Session::get('error')); ?>')
+        </script>
+    <?php endif; ?>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"
             integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -126,7 +140,7 @@
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="prev_reading">Previous Meter Reading</label>
-                            <input type="text" readonly class="form-control" id="prev_reading" name="prev_reading"
+                            <input type="text" <?php if(isset($logbook)): ?> readonly <?php endif; ?> class="form-control" id="prev_reading" name="prev_reading"
                                 value="<?php if(isset($logbook)): ?> <?php echo e($logbook->current_reading); ?><?php else: ?><?php echo e(0); ?> <?php endif; ?>"
                                 >
                         </div>
@@ -269,6 +283,7 @@
                                 <?php endif; ?>
                             </td>
                             <td>
+                                <a href="<?php echo e(route('vouchers.editExpense', $expense->id)); ?>" class="btn btn-info">Edit</a>
                                 <a href="<?php echo e(route('vouchers.deleteExpense', $expense->id)); ?>" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>

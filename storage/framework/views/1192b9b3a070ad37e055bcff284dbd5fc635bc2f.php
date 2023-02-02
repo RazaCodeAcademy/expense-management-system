@@ -26,9 +26,19 @@
         <br>
         <div class="card-body">
             
+            <div class="row mb-1">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="selectAll" style="cursor: pointer;">Select All</label>
+                        <input type="checkbox" name="" id="selectAll" width="100" height="100" onclick="selectEmployee()">
+                    </div>
+                </div>
+                <div class="col-sm-3"><button type="button" onclick="addPayments()" class="btn btn-success">Add Payments</button></div>
+            </div>
             <table id="example1" class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col"></th>
                         <th scope="col">Name</th>
                         <th scope="col">Code</th>
                         <th scope="col">Email</th>
@@ -46,6 +56,7 @@
                 <tbody>
                     <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
+                            <td><input type="checkbox" value="<?php echo e($employee->id); ?>" name="employeeIds[]" class="employeeIds"></td>
                             <td><?php echo e($employee->name); ?></td>
                             <td><?php echo e($employee->code); ?></td>
                             <td><?php echo e($employee->email); ?></td>
@@ -165,6 +176,14 @@
         <!-- AdminLTE App -->
         
         <script>
+            const ele = (id) => {
+                return document.getElementById(id);
+            }
+
+            const getUrl = (url, id) => {
+                return url.replace('item_id', id);
+            }
+
             $(function() {
                 $("#example1").DataTable({
                     "order": [
@@ -214,6 +233,40 @@
 
                 });
             });
+
+            const selectEmployee = () => {
+                var empElements = document.querySelectorAll('.employeeIds');
+                empElements.forEach((e)=>{
+                    e.checked = e.checked == true ? false : true;
+                });
+            }
+
+            const addPayments = () => {
+                var ids = [];
+                var counts = 0;
+                var empElements = document.querySelectorAll('.employeeIds');
+                empElements.forEach((e)=>{
+                    e.checked == true ? ids.push(e.value) : '';
+                });
+
+                if(ids.length > 0){
+                    ids.forEach((id)=>{
+                        $.ajax({
+                            type:"GET",
+                            url:getUrl('<?php echo e(route("employees.payamount", "item_id")); ?>', id),
+                            data:{
+                                id
+                            },
+                            success:(res)=>{
+                                counts++;
+                                if(ids.length == counts){
+                                    location.reload();
+                                }
+                            }
+                        });
+                    });
+                }
+            }
         </script>
         <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
         <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>

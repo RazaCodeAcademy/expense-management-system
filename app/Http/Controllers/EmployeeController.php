@@ -217,13 +217,14 @@ class EmployeeController extends Controller
 
     public function payamount(Request $request, $id)
     {
+        DB::beginTransaction();
+
+        // add balance to employee's account
+        $employee = Employee::findorfail($id);
+        $wallet_balance = $employee->wallet_balance + abs($employee->wallet_balance);
         // dd('sadfa');
+        if($employee->wallet_balance < 0){
 
-            DB::beginTransaction();
-
-            // add balance to employee's account
-            $employee = Employee::findorfail($id);
-            $wallet_balance = $employee->wallet_balance + abs($employee->wallet_balance);
             $employee->wallet_balance = $wallet_balance;
             $employee->save();
 
@@ -265,8 +266,15 @@ class EmployeeController extends Controller
                 $message->to($email, 'Balance added to your account')->subject
                    ('Laravel Basic Testing Mail');
              });
+        }
 
-            return redirect(route('employees.index'));
+        if(request()->ajax()){
+            return response()->json([
+                'success'=>true,
+            ]);
+        }
+
+        return redirect(route('employees.index'));
     }
 
     /**

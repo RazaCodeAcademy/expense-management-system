@@ -41,4 +41,9 @@ class Expense extends Model
     {
         return $this->hasMany(Logbook::class, 'expense_id', 'id');
     }
+
+    public function logbook()
+    {
+        return $this->hasOne(Logbook::class, 'expense_id', 'id');
+    }
 }

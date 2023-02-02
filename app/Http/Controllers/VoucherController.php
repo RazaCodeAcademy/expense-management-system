@@ -475,7 +475,7 @@ class VoucherController extends Controller
         $emailsubject = 'Your voucher has been rejected';
         $emailmessage = 'We are sorry to inform you that your voucher numbered ' . $voucher->number . ' has been rejected.';
 
-        if($status == 2) {
+        if($status == 2 && auth()->user()->is_admin == 1) {
             $date = json_decode($request->getContent(), true)['date'];
             $payment_mode = json_decode($request->getContent(), true)['payment_mode'];
             $amount = json_decode($request->getContent(), true)['amount'];
@@ -937,6 +937,13 @@ class VoucherController extends Controller
         return redirect(route('vouchers.draft'));
     }
 
+    public function editExpense($id){
+        $expense = Expense::findOrFail($id);
+        $expenseCategories = ExpenseCategory::all();
+        $logbook = Logbook::where('expense_id', $id)->first();
+        return view('vouchers.editExpense', compact('expense', 'expenseCategories', 'logbook'));
+    }
+
     public function updateExpense(Request $request, $id)
     {
         $this->validate($request, [
@@ -952,6 +959,44 @@ class VoucherController extends Controller
             'description' => $request->input('description'),
             'amount' => $request->input('amount'),
         ]);
+
+
+        if($request->input('category') == 5){
+            $logbook = Logbook::where('expense_id', $id)->first();
+            if($logbook){
+                $prev_reading = $logbook ? $logbook->current_reading : 0;
+
+                // dd($request);
+                $log = $logbook->update([
+                    'leters'                => $request->leters,
+                    'fuel_price_per_leter'  => $request->fuel_price_per_leter,
+                    'fuel_price_total'      => $request->fuel_price_total,
+                    'current_reading'       => $request->current_reading ,
+                    'distance'              => $request->current_reading - $prev_reading,
+                    'purpose'               => $request->purpose,
+                    'journey'               => $request->journey,
+
+                ]);
+            }else{
+                $log = Logbook::create([
+                    'user_id'               => Auth::Id(),
+                    'expense_id'            => $id,
+                    'lat_from'              => $request->lat_from,
+                    'long_from'             => $request->lng_from,
+                    'lat_to'                => $request->lat_to,
+                    'long_to'               => $request->lng_to,
+                    'leters'                => $request->leters,
+                    'fuel_price_per_leter'  => $request->fuel_price_per_leter,
+                    'fuel_price_total'      => $request->fuel_price_total,
+                    'prev_reading'          => $request->prev_reading,
+                    'current_reading'       => $request->current_reading,
+                    'distance'              => $request->current_reading - $request->current_reading,
+                    'purpose'               => $request->purpose,
+                    'journey'               => $request->journey,
+
+                ]);
+            }
+        }
 
         if ($request->hasFile('bill')) {
             // delete old bills
@@ -990,9 +1035,11 @@ class VoucherController extends Controller
         $expense->expensecategory()->associate($expensecategory);
         $expense->save();
 
-        $voucher = Voucher::where('id', $expense->voucher_id)->first();
+        if($request->save_and_continue){
+            return redirect()->back();
+        }
 
-        return redirect(route('vouchers.edit', ['id' => $voucher->id]));
+        return redirect(route('vouchers.edit', ['id' => $expense->voucher_id]))->with('success', 'Expense created successfuly!');
     }
 
     public function destroyExpense(Request $request)

@@ -140,6 +140,7 @@ Route::group(['prefix' => '/vouchers', 'middleware' => 'auth'], function () {
     Route::post('/update/{id}', [VoucherController::class, 'update'])->name('vouchers.update')->middleware('can:employee');
 
     Route::post('/createExpense/{id}', [VoucherController::class, 'createExpense'])->name('vouchers.createExpense')->middleware('can:employee');
+    Route::get('/editExpense/{id}', [VoucherController::class, 'editExpense'])->name('vouchers.editExpense')->middleware('can:employee');
     Route::post('/updateExpense/{id}', [VoucherController::class, 'updateExpense'])->name('vouchers.updateExpense')->middleware('can:employee');
     Route::post('/destroyExpense', [VoucherController::class, 'destroyExpense'])->name('vouchers.destroyExpense')->middleware('can:employee');
     Route::get('/deleteExpense/{expenseId}', [VoucherController::class, 'deleteExpense'])->name('vouchers.deleteExpense')->middleware('can:employee');

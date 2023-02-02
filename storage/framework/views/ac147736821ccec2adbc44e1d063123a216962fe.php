@@ -1,34 +1,32 @@
-@extends('adminlte::page')
+<?php $__env->startSection('title', 'Edit Voucher'); ?>
 
-@section('title', 'Edit Voucher')
-
-@section('content_header')
+<?php $__env->startSection('content_header'); ?>
     <h1>Edit Voucher</h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @push('css')
-    <script src="{{asset('/toast/toastr.js')}}"></script>
-    <script src="{{asset('/toast/toastr.min.js')}}"></script>
-    @if(Session::has('success'))
-    {{-- @dd(Session::has('success')) --}}
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startPush('css'); ?>
+    <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+    <?php if(Session::has('success')): ?>
+    
         <script>
             toastr.options.positionClass = 'toast-top-right';
-            toastr.success('{{  Session::get('success') }}')
+            toastr.success('<?php echo e(Session::get('success')); ?>')
         </script>
-    @endif
+    <?php endif; ?>
 
-    @if(Session::has('error'))
+    <?php if(Session::has('error')): ?>
         <script>
             toastr.options.positionClass = 'toast-top-right';
-            toastr.error('{{  Session::get('error') }}')
+            toastr.error('<?php echo e(Session::get('error')); ?>')
         </script>
-    @endif
+    <?php endif; ?>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"
             integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-    @endpush
-    @push('js')
+    <?php $__env->stopPush(); ?>
+    <?php $__env->startPush('js'); ?>
         <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQb-7NDLDsJh-l3siJQ_1gEw2lBgWKYlU&libraries=places,diections">
             // src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-5CY9mOCeg5Y3IhPqi_Yd0-DZtWrJl-E&callback=myMap&q=lahore">
@@ -37,101 +35,50 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"
             integrity="sha512-8RnEqURPUc5aqFEN04aQEiPlSAdE0jlFS/9iGgUyNtwFnSKCXhmB6ZTNl7LnDtDWKabJIASzXrzD0K+LYexU9g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    @endpush
+    <?php $__env->stopPush(); ?>
 
     <div class="card px-3 py-1">
 
-        <form method="POST" action="{{ route('vouchers.update', ['id' => $voucher->id]) }}" novalidate>
-            @if ($errors->any())
-                <div class="border border-danger text-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            @csrf
-
-            <div class="row">
-                {{-- <div class="form-group col-sm-4">
-                    <label for="job">Select Job</label>
-                    <select class="form-control js-example-basic-multiple" id="job" name="job[]" multiple="multiple"
-                        @if ($voucher->status !== 0) disabled @endif>
-                        <?php
-                        $vouchers = $voucher->jobs()->get();
-                        $voucherids = [];
-                        foreach ($vouchers as $v) {
-                            array_push($voucherids, $v->id);
-                        }
-                        ?>
-                        @foreach ($jobs as $job)
-                            <option value="{{ $job->id }}"
-                                @if (isset($voucher)) @if (in_array($job->id, $voucherids)) selected @endif
-                                @endif>
-                                {{ $job->number }} - {{ $job->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div> --}}
-                <div class="form-group col-sm-4">
-                    <label for="vouchernumber">Voucher Number</label>
-                    <input type="text" class="form-control" id="vouchernumber" name="vouchernumber"
-                        value="{{ $voucher->number }}" required disabled>
-                </div>
-            </div>
-
-            {{-- @if ($voucher->status === 0)
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Update">
-                </div>
-            @endif --}}
-
-        </form>
-
-        <br><br>
-
-        @if ($voucher->status === 0)
-            <form id="insertForm" method="POST" action="{{ route('vouchers.createExpense', ['id' => $voucher->id]) }}"
+            <form id="insertForm" method="POST" action="<?php echo e(route('vouchers.updateExpense', ['id' => $expense->id])); ?>"
                 enctype="multipart/form-data">
-                @if ($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="border border-danger text-danger">
                         <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @csrf
+                <?php echo csrf_field(); ?>
 
                 <div class="row">
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="date">Expense Date</label>
                         <input type="date" class="form-control" id="date" name="date"
-                            value="{{ isset($expense->date) ? $expense->date->format('Y-m-d') : date('Y-m-d') }}"
+                            value="<?php echo e($expense->date->format('Y-m-d')); ?>"
                             required>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="category">Expense Category</label>
                         <select class="form-control" id="category" name="category" onchange="getFuelDetails(this.value)"
                             required>
-                            @foreach ($expenseCategories as $category)
-                                <option value="{{ $category->id }}">
-                                    {{ $category->name }}
+                            <?php $__currentLoopData = $expenseCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($category->id); ?>" <?php echo e($expense->category_id == $category->id ? 'selected' : ''); ?>>
+                                    <?php echo e($category->name); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="amount">Expense Amount</label>
-                        <input type="number" class="form-control" id="amount" oninput="setAmount(this.value)" name="amount">
+                        <input type="number" class="form-control" id="amount" value="<?php echo e($expense->amount); ?>" oninput="setAmount(this.value)" name="amount">
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="description">Expense Description</label>
-                        <textarea type="text" class="form-control" id="description" name="description" rows="1" required></textarea>
+                        <textarea type="text" class="form-control" id="description" name="description" rows="1" required><?php echo e($expense->description); ?></textarea>
                     </div>
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="bill">Expense Bill</label>
@@ -140,7 +87,7 @@
 
                 </div>
                 <hr>
-                <div id="fuel_area" style="display: none">
+                <div id="fuel_area" style="display: <?php echo e($expense->category_id == 5 ? 'block' : 'none'); ?>">
 
                     <div class="row">
                         <div class="col-md-6 col-12 mb-1">
@@ -164,52 +111,43 @@
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="prev_reading">Previous Meter Reading</label>
-                            <input type="text" @if (isset($logbook)) readonly @endif class="form-control" id="prev_reading" name="prev_reading"
-                                value="@if (isset($logbook)) {{ $logbook->current_reading }}@else{{ 0 }} @endif"
+                            <input type="text" readonly class="form-control" id="prev_reading" name="prev_reading"
+                                value="<?php if(isset($logbook)): ?> <?php echo e($logbook->prev_reading); ?><?php else: ?><?php echo e(0); ?> <?php endif; ?>"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="current_reading">Current Meter Reading</label>
-                            <input type="number" min="@if(isset($logbook)){{ $logbook->current_reading+1 }}@else{{ 0 }} @endif" step=0.01 class="form-control" id="current_reading" name="current_reading"
+                            <input type="number" min="<?php if(isset($logbook)): ?> <?php echo e($logbook->prev_reading+1); ?><?php else: ?><?php echo e(0); ?> <?php endif; ?>" step=0.01 class="form-control" id="current_reading" value="<?php echo e(isset($logbook) ? $logbook->current_reading : '0'); ?>" name="current_reading"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="fuel_price_per_leter">Fuel Price Per Liter</label>
                             <input type="number"step=0.01 class="form-control" id="fuel_price_per_leter"
-                                name="fuel_price_per_leter" oninput="caculateFuel(this.value)" value="0">
+                                name="fuel_price_per_leter" oninput="caculateFuel(this.value)" value="<?php echo e(isset($logbook) ? $logbook->fuel_price_per_leter : '0'); ?>">
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="leters">Total Fuel Liter</label>
-                            <input type="number" readonly step=0.01 class="form-control" id="leters" name="leters" value="0"
+                            <input type="number" readonly step=0.01 class="form-control" id="leters" name="leters" value="<?php echo e(isset($logbook) ? $logbook->leters : '0'); ?>"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="fuel_price_total">Total Fuel Price</label>
                             <input type="number" step=0.01 readonly class="form-control" id="fuel_price_total" name="fuel_price_total"
-                                value="0">
+                                value="<?php echo e(isset($logbook) ? $logbook->fuel_price_total : '0'); ?>">
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="purpose">Route Purpose</label>
-                            <textarea type="text" class="form-control" rows="1" id="purpose" name="purpose" value=""
-                                ></textarea>
+                            <textarea type="text" class="form-control" rows="1" id="purpose" name="purpose"
+                                ><?php echo e(isset($logbook) ? $logbook->purpose : ''); ?></textarea>
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="journey">Journey</label>
                             <textarea type="text" class="form-control" rows="1" id="journey" name="journey" value=""
-                                ></textarea>
+                                ><?php echo e(isset($logbook) ? $logbook->journey : ''); ?></textarea>
                         </div>
                     </div>
                     <div class="row">
-                        {{-- <div class="col-md-6">
-                            <label for="from_location">Search from location</label>
-                            <input id="from_location" class="form-control" type="text"
-                                placeholder="Search from location" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="to_location">Search to location</label>
-                            <input id="to_location" class="form-control" type="text"
-                                placeholder="Search to location" />
-                        </div> --}}
+                        
                         <div class="col-md-12 col-12 my-2" style="display: none">
                             <label for="validationTooltip01">Location</label>
                             <div class="mapouter">
@@ -224,20 +162,19 @@
                     <input type="submit" class="btn btn-info" value="+ Save & Exit" name="save_and_exist">
                 </div>
             </form>
-        @endif
 
         <form id="updateForm" method="POST" action="" enctype="multipart/form-data" style="display: none;">
-            @if ($errors->any())
+            <?php if($errors->any()): ?>
                 <div class="border border-danger text-danger">
                     <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
             <div class="row">
                 <div class="form-group col-sm-6 col-md-3">
@@ -247,11 +184,12 @@
                 <div class="form-group col-sm-6">
                     <label for="category">Expense Category</label>
                     <select class="form-control" id="updateCategory" name="category" required>
-                        @foreach ($expenseCategories as $category)
-                            <option value="{{ $category->id }}">
-                                {{ $category->name }}
+                        <?php $__currentLoopData = $expenseCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($category->id); ?>">
+                                <?php echo e($category->name); ?>
+
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div class="form-group col-sm-6 col-md-3">
@@ -268,97 +206,18 @@
                 </div>
             </div>
             <div class="form-group">
-                @if ($voucher->status === 0)
-                    <input type="submit" class="btn btn-primary" value="Update">
-                    <input type="button" id="deleteExpenseBtn" class="btn btn-danger ml-3" value="Delete">
-                @endif
+                
             </div>
         </form>
 
         <br><br>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Bill</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($expenses as $expense)
-                        <tr @if ($voucher->status === 0) class="editExpenseBtn" @endif>
-                            <td hidden class="data">{{ $expense->id }}</td>
-                            <td class="data">{{ $expense->date->format('d-m-Y') }}</td>
-                            <td hidden class="data">{{ $expense->category_id }}</td>
-                            <td class="data">
-                                {{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
-                            <td class="data">
-                                <span class="badge badge-primary px-2 py-2" style="font-size: 1.1rem;">Rs.
-                                    {{ $expense->amount }}</span>
-                            </td>
-                            <td class="data">{{ $expense->description }}</td>
-                            <td>
-                                {{-- @dd($expense->bills) --}}
-                                @if (count($expense->bills) > 0)
-                                    <a href="{{ asset('storage/bill/' . $expense->bills->first()->file_name) }}"
-                                        target="_blank">
-                                        <img src="{{ asset('storage/bill/' . $expense->bills->first()->file_name) }}"
-                                            alt="" width="50">
-                                    </a>
-                                @else
-                                    <span class="badge badge-danger">Bill Not Provided</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('vouchers.editExpense', $expense->id) }}" class="btn btn-info">Edit</a>
-                                <a href="{{ route('vouchers.deleteExpense', $expense->id) }}" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <br>
 
-        @if ($voucher->status === 0)
-            <form id="extraFilesForm" method="POST"
-                action="{{ route('vouchers.attachAdditionalFiles', ['id' => $voucher->id]) }}"
-                enctype="multipart/form-data">
-                @if ($errors->any())
-                    <div class="border border-danger text-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
-                @csrf
-            </form>
-
-            <br>
-        @endif
-
-        {{-- <div class="form-group mt-3 mx-auto">
-            @if ($voucher->status === 0)
-                <input type="button" id="applyForApprovalBtn" class="btn btn-primary" value="Apply For Approval">
-                <a class="btn btn-danger ml-3" href="{{ route('vouchers.index') }}">Cancel</a>
-            @endif
-        </div> --}}
     </div>
+<?php $__env->stopSection(); ?>
 
-    {{-- <input type="hidden" id="voucherId" value="{{ $voucher->id }}">
-    <input type="hidden" id="url" value="{{ route('vouchers.askForApproval') }}">
-    <input type="hidden" id="deleteExpenseUrl" value="{{ route('vouchers.destroyExpense') }}"> --}}
-@stop
-
-@section('js')
+<?php $__env->startSection('js'); ?>
     <script>
         var latitude = "";
         var longitude = "";
@@ -531,23 +390,25 @@
         }
     </script>
 
-    <script src="{{ asset('js/downloadfiles.js') }}"></script>
-    <script src="{{ asset('js/approval.js') }}"></script>
-    <script src="{{ asset('js/s2.js') }}"></script>
-    <script src="{{asset('/toast/toastr.js')}}"></script>
-    <script src="{{asset('/toast/toastr.min.js')}}"></script>
-    @if(Session::has('success'))
-    {{-- @dd(Session::has('success')) --}}
+    <script src="<?php echo e(asset('js/downloadfiles.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/approval.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/s2.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.js')); ?>"></script>
+    <script src="<?php echo e(asset('/toast/toastr.min.js')); ?>"></script>
+    <?php if(Session::has('success')): ?>
+    
         <script>
             toastr.options.positionClass = 'toast-top-right';
-            toastr.success('{{  Session::get('success') }}')
+            toastr.success('<?php echo e(Session::get('success')); ?>')
         </script>
-    @endif
+    <?php endif; ?>
 
-    @if(Session::has('error'))
+    <?php if(Session::has('error')): ?>
         <script>
             toastr.options.positionClass = 'toast-top-right';
-            toastr.error('{{  Session::get('error') }}')
+            toastr.error('<?php echo e(Session::get('error')); ?>')
         </script>
-    @endif
-@stop
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\freelancing\employee-expense-management-system\resources\views/vouchers/editExpense.blade.php ENDPATH**/ ?>

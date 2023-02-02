@@ -41,59 +41,7 @@
 
     <div class="card px-3 py-1">
 
-        <form method="POST" action="{{ route('vouchers.update', ['id' => $voucher->id]) }}" novalidate>
-            @if ($errors->any())
-                <div class="border border-danger text-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            @csrf
-
-            <div class="row">
-                {{-- <div class="form-group col-sm-4">
-                    <label for="job">Select Job</label>
-                    <select class="form-control js-example-basic-multiple" id="job" name="job[]" multiple="multiple"
-                        @if ($voucher->status !== 0) disabled @endif>
-                        <?php
-                        $vouchers = $voucher->jobs()->get();
-                        $voucherids = [];
-                        foreach ($vouchers as $v) {
-                            array_push($voucherids, $v->id);
-                        }
-                        ?>
-                        @foreach ($jobs as $job)
-                            <option value="{{ $job->id }}"
-                                @if (isset($voucher)) @if (in_array($job->id, $voucherids)) selected @endif
-                                @endif>
-                                {{ $job->number }} - {{ $job->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div> --}}
-                <div class="form-group col-sm-4">
-                    <label for="vouchernumber">Voucher Number</label>
-                    <input type="text" class="form-control" id="vouchernumber" name="vouchernumber"
-                        value="{{ $voucher->number }}" required disabled>
-                </div>
-            </div>
-
-            {{-- @if ($voucher->status === 0)
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Update">
-                </div>
-            @endif --}}
-
-        </form>
-
-        <br><br>
-
-        @if ($voucher->status === 0)
-            <form id="insertForm" method="POST" action="{{ route('vouchers.createExpense', ['id' => $voucher->id]) }}"
+            <form id="insertForm" method="POST" action="{{ route('vouchers.updateExpense', ['id' => $expense->id]) }}"
                 enctype="multipart/form-data">
                 @if ($errors->any())
                     <div class="border border-danger text-danger">
@@ -111,7 +59,7 @@
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="date">Expense Date</label>
                         <input type="date" class="form-control" id="date" name="date"
-                            value="{{ isset($expense->date) ? $expense->date->format('Y-m-d') : date('Y-m-d') }}"
+                            value="{{ $expense->date->format('Y-m-d') }}"
                             required>
                     </div>
                     <div class="form-group col-sm-6">
@@ -119,7 +67,7 @@
                         <select class="form-control" id="category" name="category" onchange="getFuelDetails(this.value)"
                             required>
                             @foreach ($expenseCategories as $category)
-                                <option value="{{ $category->id }}">
+                                <option value="{{ $category->id }}" {{ $expense->category_id == $category->id ? 'selected' : ''}}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -127,11 +75,11 @@
                     </div>
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="amount">Expense Amount</label>
-                        <input type="number" class="form-control" id="amount" oninput="setAmount(this.value)" name="amount">
+                        <input type="number" class="form-control" id="amount" value="{{ $expense->amount }}" oninput="setAmount(this.value)" name="amount">
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="description">Expense Description</label>
-                        <textarea type="text" class="form-control" id="description" name="description" rows="1" required></textarea>
+                        <textarea type="text" class="form-control" id="description" name="description" rows="1" required>{{ $expense->description }}</textarea>
                     </div>
                     <div class="form-group col-sm-6 col-md-3">
                         <label for="bill">Expense Bill</label>
@@ -140,7 +88,7 @@
 
                 </div>
                 <hr>
-                <div id="fuel_area" style="display: none">
+                <div id="fuel_area" style="display: {{ $expense->category_id == 5 ? 'block' : 'none' }}">
 
                     <div class="row">
                         <div class="col-md-6 col-12 mb-1">
@@ -164,39 +112,39 @@
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="prev_reading">Previous Meter Reading</label>
-                            <input type="text" @if (isset($logbook)) readonly @endif class="form-control" id="prev_reading" name="prev_reading"
-                                value="@if (isset($logbook)) {{ $logbook->current_reading }}@else{{ 0 }} @endif"
+                            <input type="text" readonly class="form-control" id="prev_reading" name="prev_reading"
+                                value="@if (isset($logbook)) {{ $logbook->prev_reading }}@else{{ 0 }} @endif"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="current_reading">Current Meter Reading</label>
-                            <input type="number" min="@if(isset($logbook)){{ $logbook->current_reading+1 }}@else{{ 0 }} @endif" step=0.01 class="form-control" id="current_reading" name="current_reading"
+                            <input type="number" min="@if(isset($logbook)) {{ $logbook->prev_reading+1 }}@else{{ 0 }} @endif" step=0.01 class="form-control" id="current_reading" value="{{ isset($logbook) ? $logbook->current_reading : '0' }}" name="current_reading"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="fuel_price_per_leter">Fuel Price Per Liter</label>
                             <input type="number"step=0.01 class="form-control" id="fuel_price_per_leter"
-                                name="fuel_price_per_leter" oninput="caculateFuel(this.value)" value="0">
+                                name="fuel_price_per_leter" oninput="caculateFuel(this.value)" value="{{ isset($logbook) ? $logbook->fuel_price_per_leter : '0' }}">
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="leters">Total Fuel Liter</label>
-                            <input type="number" readonly step=0.01 class="form-control" id="leters" name="leters" value="0"
+                            <input type="number" readonly step=0.01 class="form-control" id="leters" name="leters" value="{{ isset($logbook) ? $logbook->leters : '0' }}"
                                 >
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="fuel_price_total">Total Fuel Price</label>
                             <input type="number" step=0.01 readonly class="form-control" id="fuel_price_total" name="fuel_price_total"
-                                value="0">
+                                value="{{ isset($logbook) ? $logbook->fuel_price_total : '0' }}">
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="purpose">Route Purpose</label>
-                            <textarea type="text" class="form-control" rows="1" id="purpose" name="purpose" value=""
-                                ></textarea>
+                            <textarea type="text" class="form-control" rows="1" id="purpose" name="purpose"
+                                >{{ isset($logbook) ? $logbook->purpose : '' }}</textarea>
                         </div>
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="journey">Journey</label>
                             <textarea type="text" class="form-control" rows="1" id="journey" name="journey" value=""
-                                ></textarea>
+                                >{{ isset($logbook) ? $logbook->journey : '' }}</textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -224,7 +172,6 @@
                     <input type="submit" class="btn btn-info" value="+ Save & Exit" name="save_and_exist">
                 </div>
             </form>
-        @endif
 
         <form id="updateForm" method="POST" action="" enctype="multipart/form-data" style="display: none;">
             @if ($errors->any())
@@ -268,94 +215,18 @@
                 </div>
             </div>
             <div class="form-group">
-                @if ($voucher->status === 0)
+                {{-- @if ($voucher->status === 0)
                     <input type="submit" class="btn btn-primary" value="Update">
                     <input type="button" id="deleteExpenseBtn" class="btn btn-danger ml-3" value="Delete">
-                @endif
+                @endif --}}
             </div>
         </form>
 
         <br><br>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Bill</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($expenses as $expense)
-                        <tr @if ($voucher->status === 0) class="editExpenseBtn" @endif>
-                            <td hidden class="data">{{ $expense->id }}</td>
-                            <td class="data">{{ $expense->date->format('d-m-Y') }}</td>
-                            <td hidden class="data">{{ $expense->category_id }}</td>
-                            <td class="data">
-                                {{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
-                            <td class="data">
-                                <span class="badge badge-primary px-2 py-2" style="font-size: 1.1rem;">Rs.
-                                    {{ $expense->amount }}</span>
-                            </td>
-                            <td class="data">{{ $expense->description }}</td>
-                            <td>
-                                {{-- @dd($expense->bills) --}}
-                                @if (count($expense->bills) > 0)
-                                    <a href="{{ asset('storage/bill/' . $expense->bills->first()->file_name) }}"
-                                        target="_blank">
-                                        <img src="{{ asset('storage/bill/' . $expense->bills->first()->file_name) }}"
-                                            alt="" width="50">
-                                    </a>
-                                @else
-                                    <span class="badge badge-danger">Bill Not Provided</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('vouchers.editExpense', $expense->id) }}" class="btn btn-info">Edit</a>
-                                <a href="{{ route('vouchers.deleteExpense', $expense->id) }}" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <br>
 
-        @if ($voucher->status === 0)
-            <form id="extraFilesForm" method="POST"
-                action="{{ route('vouchers.attachAdditionalFiles', ['id' => $voucher->id]) }}"
-                enctype="multipart/form-data">
-                @if ($errors->any())
-                    <div class="border border-danger text-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
-                @csrf
-            </form>
-
-            <br>
-        @endif
-
-        {{-- <div class="form-group mt-3 mx-auto">
-            @if ($voucher->status === 0)
-                <input type="button" id="applyForApprovalBtn" class="btn btn-primary" value="Apply For Approval">
-                <a class="btn btn-danger ml-3" href="{{ route('vouchers.index') }}">Cancel</a>
-            @endif
-        </div> --}}
     </div>
-
-    {{-- <input type="hidden" id="voucherId" value="{{ $voucher->id }}">
-    <input type="hidden" id="url" value="{{ route('vouchers.askForApproval') }}">
-    <input type="hidden" id="deleteExpenseUrl" value="{{ route('vouchers.destroyExpense') }}"> --}}
 @stop
 
 @section('js')

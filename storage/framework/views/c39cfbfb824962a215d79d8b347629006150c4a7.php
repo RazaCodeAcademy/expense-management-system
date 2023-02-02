@@ -86,10 +86,6 @@
     </div>
 
     <?php $__env->startPush('js'); ?>
-        <!-- jQuery -->
-        <script src="<?php echo e(asset('/plugins/jquery/jquery.min.js')); ?>"></script>
-        <!-- Bootstrap 4 -->
-        <script src="<?php echo e(asset('/plugins/bootstrap/js/bootstrap.bundle.min.js')); ?>"></script>
         <!-- DataTables  & Plugins -->
         <script src="<?php echo e(asset('/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
         <script src="<?php echo e(asset('/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
